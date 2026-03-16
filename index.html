@@ -1679,9 +1679,14 @@ footer p {
 </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
 
-<audio id="bg-audio" loop preload="none" style="display:none">
-  <source src="https://raw.githubusercontent.com/carolinaoscurato-lee/criminedonore-asset/main/Fronna%20(online-audio-converter.com).mp3" type="audio/mpeg">
-</audio>
+<audio id="bg-audio" src="Fronna.mp3" loop preload="auto" style="display:none"></audio>
+
+<script>
+  document.body.addEventListener('click', function() {
+    var audio = document.getElementById('bg-audio');
+    audio.play();
+  }, { once: true });
+</script>
 
 <style>
 #music-banner {
