@@ -1679,13 +1679,20 @@ footer p {
 </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
 
-<audio id="bg-audio" src="Fronna.mp3" loop preload="auto" style="display:none"></audio>
+<audio id="bg-audio" src="Fronna.mp3" loop="true" autoloop preload="auto" playsinline style="display:none"></audio>
 
 <script>
-  document.body.addEventListener('click', function() {
+  function playAudio() {
     var audio = document.getElementById('bg-audio');
-    audio.play();
-  }, { once: true });
+    audio.loop = true; // Forza il loop via script
+    audio.play().catch(function(error) {
+      console.log("Autoplay bloccato, riprova al prossimo clic.");
+    });
+  }
+
+  // Si attiva al primo clic ovunque nella pagina
+  document.body.addEventListener('click', playAudio, { once: true });
+  document.body.addEventListener('touchstart', playAudio, { once: true });
 </script>
 
 <style>
