@@ -1194,12 +1194,12 @@ footer p {
 <section id="sec-progetto" class="fade-section">
   <span class="section-label" data-it="Il Progetto" data-en="The Project">Il Progetto</span>
   <h2 data-it="Un noir che fonde il verismo di Viviani<br><em>con una dimensione espressionista e visionaria.</em>" data-en="A noir blending the verism of Viviani<br><em>with an expressionist and visionary dimension.</em>">Un noir che fonde il verismo di Viviani<br><em>con una dimensione espressionista e visionaria.</em></h2>
-  <p data-it="Torre del Greco, notte. La paranza è in mare. A terra restano tensioni, silenzi e verità taciute. Un gesto improvviso rompe l&rsquo;equilibrio. La violenza chiama violenza." data-en="Torre del Greco, night. The fishing boat is at sea. On land, tensions, silences and unspoken truths remain. A sudden gesture breaks the balance. Violence calls for violence." style="font-size:clamp(1rem,2.5vw,1.25rem);color:rgba(240,230,208,0.88);line-height:2;margin-top:1.5rem;">Torre del Greco, notte. La paranza è in mare. A terra restano tensioni, silenzi e verità taciute. Un gesto improvviso rompe l&rsquo;equilibrio. La violenza chiama violenza.</p>
+  <p data-it="Torre del Greco, notte. La paranza è in mare. A terra restano tensioni, silenzi e verità taciute. Un gesto improvviso rompe l&rsquo;equilibrio. La violenza chiama violenza." data-en="Torre del Greco, night. The fishing boat is at sea. On land, tensions, silences and unspoken truths remain. A sudden gesture breaks the balance. Violence calls for violence." style="font-size:clamp(1rem,2.5vw,1.25rem);color:var(--sabbia);line-height:2;margin-top:1.5rem;">Torre del Greco, notte. La paranza è in mare. A terra restano tensioni, silenzi e verità taciute. Un gesto improvviso rompe l&rsquo;equilibrio. La violenza chiama violenza.</p>
   <p data-it="Liberamente ispirato al dramma I Pescatori di Raffaele Viviani, il film esplora un universo umano fatto di silenzi e tensioni." data-en="Freely inspired by Raffaele Viviani&rsquo;s drama I Pescatori, the film explores a human universe of silences and tensions." style="margin-top:1.5rem;">Liberamente ispirato al dramma <em>I Pescatori</em> di Raffaele Viviani, il film esplora un universo umano fatto di silenzi e tensioni.</p>
   <div class="territory-block">
     <p data-it="Torre del Greco sorge sulla costa orientale del Golfo di Napoli, ai piedi del Vesuvio. Città del corallo e della pesca, è una delle comunità marinare più antiche e radicate del Mezzogiorno d&rsquo;Italia. Tra la paranza notturna e la vita del porto, il mare diventa testimone degli eventi e custode di ciò che gli uomini scelgono di non dire." data-en="Torre del Greco stands on the eastern coast of the Gulf of Naples, at the foot of Vesuvius. A city of coral and fishing, it is one of the oldest and most deep-rooted maritime communities in southern Italy. Between the night fishing boat and the life of the port, the sea becomes witness to events and keeper of what men choose not to say.">Torre del Greco sorge sulla costa orientale del Golfo di Napoli, ai piedi del Vesuvio. Città del corallo e della pesca, è una delle comunità marinare più antiche e radicate del Mezzogiorno d&rsquo;Italia. Tra la paranza notturna e la vita del porto, il mare diventa testimone degli eventi e custode di ciò che gli uomini scelgono di non dire.</p>
   </div>
-  <p style="margin-top:1.5rem;font-size:1.05rem;line-height:2;color:rgba(240,230,208,0.75);font-style:italic;">In questo mondo antico, il destino delle donne si intreccia con le regole non scritte dell&rsquo;onore e della comunità, dove il silenzio spesso pesa più della violenza stessa.</p>
+  <p style="margin-top:1.5rem;font-size:1.05rem;line-height:2;color:var(--oro-chiaro);font-style:italic;border-left:2px solid rgba(194,180,136,0.3);padding-left:1.2rem;">In questo mondo antico, il destino delle donne si intreccia con le regole non scritte dell&rsquo;onore e della comunità, dove il silenzio spesso pesa più della violenza stessa.</p>
 </section>
 
 <div class="divider"></div>
@@ -1273,7 +1273,7 @@ footer p {
     <p style="font-size:1.05rem;line-height:1.9;color:rgba(240,230,208,0.92);margin-bottom:1rem;">
       Torre del Greco ha una storia. Il mare, i pescatori, la paranza. E sotto, come sempre nelle storie vere, il buio. Questo film non guarda dall&rsquo;altra parte.
     </p>
-    <p style="font-size:1.05rem;line-height:1.9;color:rgba(240,230,208,0.92);margin-bottom:3.5rem;">
+    <p style="font-size:1.15rem;line-height:1.9;color:var(--oro-chiaro);margin-bottom:3.5rem;border-left:2px solid var(--oro);padding-left:1.4rem;font-family:'Source Serif 4',serif;font-weight:500;">
       Stiamo coinvolgendo un numero limitato di imprese del territorio (max 12 partner) per sostenere la realizzazione del film. Un&rsquo;opportunità concreta per associare il proprio nome a un film destinato ai festival nazionali e internazionali.
     </p>
 
@@ -1679,21 +1679,9 @@ footer p {
 </footer>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
 
-<audio id="bg-audio" src="Fronna.mp3" loop="true" autoloop preload="auto" playsinline style="display:none"></audio>
-
-<script>
-  function playAudio() {
-    var audio = document.getElementById('bg-audio');
-    audio.loop = true; // Forza il loop via script
-    audio.play().catch(function(error) {
-      console.log("Autoplay bloccato, riprova al prossimo clic.");
-    });
-  }
-
-  // Si attiva al primo clic ovunque nella pagina
-  document.body.addEventListener('click', playAudio, { once: true });
-  document.body.addEventListener('touchstart', playAudio, { once: true });
-</script>
+<audio id="bg-audio" loop preload="none" style="display:none">
+  <source src="https://raw.githubusercontent.com/carolinaoscurato-lee/criminedonore-asset/main/Fronna%20(online-audio-converter.com).mp3" type="audio/mpeg">
+</audio>
 
 <style>
 #music-banner {
