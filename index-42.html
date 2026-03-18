@@ -1,0 +1,2442 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crimine d'Onore · Partnership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,300;0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,300;1,6..96,400;1,6..96,700;1,6..96,900&family=Montserrat:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;500&family=Special+Elite&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --nero:         #0D1114;
+  --bianco-calce: #ECE6DA;
+  --rosso-sangue: #660000;
+  --blu-notte:    #001A2D;
+  --lampara:      #A89060;
+
+  /* alias sistema */
+  --oro:          #A89060;
+  --oro-chiaro:   #A89060;
+  --sabbia:       #ECE6DA;
+  --grigio-caldo: #8a7a68;
+  --rosso-scuro:  #660000;
+  --bianco:       #ECE6DA;
+  --gold:         #A89060;
+  --sand:         #ECE6DA;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #0D1114;
+  color: var(--bianco-calce);
+  font-family: 'Source Serif 4', serif;
+  font-weight: 400;
+  font-size: 18px;
+  overflow-x: hidden;
+}
+
+/* GRAIN OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.55;
+}
+
+/* VIGNETTATURA LAMPARA — raggio d'azione limitato, buio ai bordi */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 40%,
+    transparent 30%,
+    rgba(13,17,20,0.35) 65%,
+    rgba(13,17,20,0.75) 100%
+  );
+}
+
+/* VIGNETTATURA LAMPARA — angoli nel buio */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background:
+    radial-gradient(ellipse 90% 80% at 48% 45%, transparent 35%, rgba(13,17,20,0.5) 75%, rgba(13,17,20,0.85) 100%),
+    radial-gradient(ellipse 40% 30% at 5% 95%, rgba(30,18,5,0.3) 0%, transparent 60%);
+}
+
+/* BREVO WIDGET POSITION OVERRIDE */
+#brevo-conversations,
+.brevo-conversations-widget,
+[id^="brevo-conversations"] {
+  bottom: 1.5rem !important;
+  right: 20px !important;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 54px;
+  background: rgba(13,17,20,0.95);
+  border-bottom: 1px solid rgba(51,42,34,0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.4s;
+}
+nav.hidden { opacity: 0; pointer-events: none; }
+
+.nav-logo {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.9rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--oro);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2.2rem;
+  align-items: center;
+}
+.nav-links a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(236,230,218,0.65);
+  text-decoration: none;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--bianco-calce); }
+
+.nav-arrows {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.nav-arrow {
+  background: transparent;
+  border: 1px solid rgba(236,230,218,0.3);
+  color: rgba(236,230,218,0.65);
+  width: 32px; height: 32px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+  font-family: 'Montserrat', sans-serif;
+}
+.nav-arrow:hover {
+  background: var(--oro);
+  color: var(--nero);
+  border-color: var(--oro);
+}
+.nav-arrow:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+.nav-arrow:disabled:hover {
+  background: transparent;
+  color: rgba(168,144,96,0.6);
+  border-color: rgba(168,144,96,0.3);
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  #lang-toggle { display: inline-block !important; }
+}
+
+/* =====================
+   HERO — immagine full-width orizzontale
+   ===================== */
+.hero {
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+  background: #0D1114;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(168,144,96,0.15);
+}
+
+/* object-fit cover con focus su composizione verticale */
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.08);
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(13,17,20,0.85),
+    rgba(13,17,20,0.95)
+  );
+  z-index: 1;
+}
+
+.hero > * { position: relative; z-index: 2; }
+
+/* Testo hero: centrato, posizionato in alto subito sotto la nav */
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+  padding: 54px 1.2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.hero-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 0.65rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--oro);
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.3s forwards;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-title {
+  font-family: "Bodoni Moda", serif;
+  font-size: clamp(5rem, 11vw, 9.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--bianco-calce);
+  text-shadow: 0 2px 24px rgba(0,0,0,0.9);
+  opacity: 0;
+  animation: fadeUp 1.1s ease 0.6s forwards;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-title em {
+  font-style: italic;
+  font-weight: 600;
+  color: #A89060;
+  text-shadow:
+    0 0 8px rgba(168,144,96,0.12),
+    0 0 18px rgba(168,144,96,0.05);
+  margin-left: 0.1em;
+}
+
+.hero-title .line1 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: -0.05em;
+}
+
+.hero-title .line2 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--lampara);
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 40px rgba(168,144,96,0.35), 0 0 80px rgba(168,144,96,0.15);
+}
+
+.hero-tagline {
+  font-family: 'Courier Prime', monospace;
+  font-size: 1.25rem;
+  font-style: normal;
+  color: #D8CCB8;
+  text-shadow: none;
+  margin-top: 2rem;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 1.1s forwards;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-memorial {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #A89060;
+  text-shadow: none;
+  margin-top: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.6s forwards;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-credits {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: #DDD5C8;
+  margin-top: 0.4rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.9s forwards;
+  width: 100%;
+  text-align: center;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.95), 0 2px 20px rgba(0,0,0,0.8);
+}
+
+/* Meta bar in basso */
+.hero-meta {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: rgba(13,17,20,0.8);
+  border-top: 1px solid rgba(168,144,96,0.15);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.3s forwards;
+  box-sizing: border-box;
+}
+
+.hero-meta-item {
+  flex: 1;
+  min-width: 140px;
+  padding: 1.1rem 1.5rem;
+  border-right: 1px solid rgba(51,42,34,0.6);
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(168,144,96,0.85);
+}
+.hero-meta-item:last-child { border-right: none; }
+
+.hero-meta-item span {
+  display: block;
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #CFC6B8;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 600px) {
+  .hero-content {
+    left: 50%;
+    right: auto;
+    width: 100%;
+    padding: 54px 1rem 0;
+    box-sizing: border-box;
+  }
+  .hero-meta {
+    flex-wrap: wrap;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+  .hero-meta-item {
+    flex: 1 1 45%;
+    min-width: 0;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.5rem;
+  }
+  .hero-title { font-size: clamp(2.2rem, 10vw, 3.5rem) !important; }
+  .hero-eyebrow { font-size: 0.55rem !important; letter-spacing: 0.2em !important; }
+  .hero-credits { 
+    white-space: normal !important; 
+    font-size: 0.68rem !important;
+    letter-spacing: 0.05em !important;
+    line-height: 1.6 !important;
+  }
+  .hero-memorial { font-size: 0.55rem !important; }
+  .hero-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(13,17,20,0.82) 0%,
+      rgba(13,17,20,0.60) 35%,
+      rgba(13,17,20,0.70) 65%,
+      rgba(13,17,20,0.96) 100%
+    ) !important;
+  }
+  section { padding: 3rem 1.2rem; }
+  .partnership-section { padding: 3rem 1.2rem; }
+  .contacts-section { padding: 3rem 1.2rem; }
+  .contacts-grid { gap: 1.5rem; }
+  .autori-grid { gap: 1.5rem; }
+  .tiers-grid { grid-template-columns: 1fr; }
+  .partner-cta-buttons { flex-direction: column; align-items: center; }
+  #music-banner { padding: 0.7rem 1rem; }
+}
+
+/* SECTIONS */
+section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(168,144,96,0.85);
+  margin-bottom: 2rem;
+  display: block;
+}
+
+h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--bianco-calce);
+  margin-bottom: 1.5rem;
+}
+
+h2 em { font-style: italic; color: var(--lampara); text-shadow: 0 0 20px rgba(168,144,96,0.2); }
+
+p {
+  font-size: 1.05rem;
+  line-height: 2;
+  color: rgba(236,230,218,0.95);
+  max-width: 640px;
+  letter-spacing: 0.01em;
+}
+
+p + p { margin-top: 1.8rem; }
+
+.divider {
+  max-width: 900px;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,26,45,0.8), rgba(168,144,96,0.15), rgba(0,26,45,0.8), transparent);
+}
+
+.territory-block {
+  background: rgba(18,20,22,0.7);
+  border: 1px solid rgba(51,42,34,0.6);
+  border-left: 3px solid var(--oro);
+  padding: 2.5rem;
+  margin-top: 3rem;
+}
+
+.territory-block p {
+  font-size: 1rem;
+  color: rgba(236,230,218,0.72);
+  line-height: 2;
+}
+
+/* MEMORIAL */
+.memorial {
+  background: linear-gradient(135deg, rgba(92,26,26,0.25) 0%, rgba(30,25,20,0.8) 60%, rgba(15,18,22,0.9) 100%);
+  border: 1px solid rgba(92,26,26,0.35);
+  border-left: 3px solid rgba(168,144,96,0.4);
+  padding: 3.5rem 3rem;
+  text-align: center;
+  position: relative;
+  margin-top: 3rem;
+  overflow: hidden;
+}
+
+.memorial::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('https://i.postimg.cc/44VBxVkD/Gemini-Generated-Image-34aft934aft934af-(1).png');
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+.memorial > * { position: relative; z-index: 1; }
+
+.memorial-quote {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 600;
+  font-style: italic;
+  color: #CFC6B8;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.01em;
+}
+
+.memorial-attr {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #A89060;
+}
+
+/* =====================
+   SLIDER
+   ===================== */
+.slider-section {
+  max-width: 100%;
+  padding: 3rem 0 4rem;
+  overflow: hidden;
+}
+
+.slider-wrap {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 18px;
+  background:
+    url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png') center/cover;
+  box-shadow: inset 0 0 0 18px rgba(13,17,20,0.0);
+}
+
+/* Maschera scura sopra la texture — visibile solo ai bordi */
+.slider-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 78% 72% at 50% 50%,
+    rgba(13,17,20,0.0) 60%,
+    rgba(13,17,20,0.85) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Titolo sezione Materia del film */
+.slider-section-header {
+  max-width: 920px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1.5rem;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+  will-change: transform;
+}
+
+.slide {
+  flex: 0 0 100%;
+  width: 100%;
+  position: relative;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.slide img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  outline: 6px solid rgba(13,17,20,0.95);
+  outline-offset: -6px;
+  box-shadow:
+    0 0 0 1px rgba(168,144,96,0.18),
+    inset 0 0 30px rgba(13,17,20,0.3);
+  filter: contrast(0.88) brightness(0.82) saturate(0.85);
+}
+
+@media (max-width: 600px) {
+  .slide img { height: 280px; }
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(13,17,20,0.85));
+  padding: 2rem 2rem 1.2rem;
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.25rem;
+  color: rgba(236,230,218,0.8);
+}
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(13,17,20,0.8);
+  border: 1px solid rgba(168,144,96,0.3);
+  color: var(--oro);
+  width: 44px; height: 44px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+  backdrop-filter: blur(6px);
+}
+.slider-btn:hover { background: var(--oro); color: var(--nero); }
+.slider-btn.prev { left: 1rem; }
+.slider-btn.next { right: 1rem; }
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0 0.5rem;
+}
+
+.s-dot {
+  width: 24px; height: 2px;
+  background: rgba(168,144,96,0.25);
+  cursor: pointer;
+  transition: background 0.3s, width 0.3s;
+}
+.s-dot.active {
+  background: var(--oro);
+  width: 36px;
+}
+
+/* =====================
+   PARTNERSHIP
+   ===================== */
+.partnership-section {
+  background: linear-gradient(180deg, rgba(15,18,20,0.95) 0%, rgba(13,17,20,1) 100%);
+  border-top: 1px solid rgba(51,42,34,0.6);
+  border-bottom: 1px solid rgba(51,42,34,0.6);
+  padding: 5rem 2rem;
+}
+
+.partnership-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+  align-items: start;
+}
+
+@media (max-width: 700px) { .tiers-grid { grid-template-columns: 1fr; } }
+
+.tier-card {
+  border: 1px solid rgba(168,144,96,0.35);
+  padding: 2.5rem 2rem;
+  background: rgba(168,144,96,0.03);
+  position: relative;
+  transition: border-color 0.3s;
+}
+
+.tier-card:hover { border-color: rgba(168,144,96,0.65); }
+
+.tier-featured {
+  border-color: var(--oro);
+  background: linear-gradient(160deg, rgba(168,144,96,0.07) 0%, rgba(13,17,20,0) 100%);
+}
+
+.tier-badge {
+  position: absolute;
+  top: -1px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--oro);
+  color: var(--nero);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 16px;
+  white-space: nowrap;
+}
+
+.tier-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #A89060;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.tier-price {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--bianco-calce);
+  line-height: 1;
+  margin-bottom: 1.8rem;
+}
+
+.tier-benefits {
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid rgba(168,144,96,0.15);
+}
+
+.tier-benefits li {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: rgba(236,230,218,0.7);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(51,42,34,0.5);
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  max-width: none;
+}
+
+.tier-benefits li::before {
+  content: '—';
+  color: var(--oro);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+.tax-note {
+  margin-top: 2rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: #CFC6B8;
+  border-left: 1px solid rgba(168,144,96,0.4);
+  padding-left: 1rem;
+  max-width: none;
+}
+
+.partner-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 3.5rem;
+}
+.partner-benefit-item {
+  border-top: 1px solid rgba(168,144,96,0.2);
+  padding-top: 1.5rem;
+}
+.partner-benefit-icon {
+  display: block;
+  color: #CFC6B8;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.2em;
+}
+.partner-benefit-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--bianco-calce);
+  margin-bottom: 0.6rem;
+  max-width: none;
+}
+.partner-benefit-desc {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: rgba(236,230,218,0.7);
+  max-width: none;
+}
+
+.partner-cta-block {
+  margin-top: 4rem;
+  text-align: center;
+  padding: 3rem 2rem;
+  border: 1px solid rgba(168,144,96,0.2);
+  background: rgba(168,144,96,0.03);
+}
+
+.partner-cta-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--oro);
+  margin: 0 0 1rem;
+  display: block;
+}
+
+.partner-cta-text {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 400;
+  color: var(--bianco-calce);
+  line-height: 1.6;
+  max-width: none;
+  margin: 0 0 2rem;
+}
+
+.partner-cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* BUTTONS */
+.cta-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1rem 2.5rem;
+  background: var(--oro);
+  color: var(--nero);
+  transition: background 0.3s, transform 0.2s;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-btn:hover { background: var(--rosso-sangue); color: #ECE6DA; transform: translateY(-2px); box-shadow: 0 0 20px rgba(102,0,0,0.4); }
+
+.cta-btn-secondary {
+  background: transparent;
+  color: var(--oro);
+  border: 1px solid rgba(168,144,96,0.4);
+}
+
+.cta-btn-secondary:hover { background: rgba(51,42,34,0.5); }
+
+/* AUTORI */
+.autori-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+  align-items: stretch;
+}
+
+@media (max-width: 600px) { .autori-grid { grid-template-columns: 1fr; } }
+
+.autore-name {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--bianco-calce);
+  margin-bottom: 0.2rem;
+  max-width: none;
+}
+.autore-role {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #A89060;
+  margin-bottom: 1rem;
+  max-width: none;
+}
+.autore-bio {
+  font-size: 1.25rem;
+  line-height: 1.85;
+  color: rgba(236,230,218,0.82);
+  max-width: none;
+}
+.autore-credits {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(168,144,96,0.15);
+  font-size: 0.85rem;
+  line-height: 2;
+  color: rgba(168,144,96,0.82);
+  max-width: none;
+}
+
+/* CONTATTI */
+.contacts-section {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(15,25,35,0.6), transparent);
+  border-top: 1px solid rgba(51,42,34,0.6);
+}
+
+.contacts-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-block { text-align: left; }
+.contact-name {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--bianco-calce);
+  margin-bottom: 0.2rem;
+  max-width: none;
+}
+.contact-role {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #A89060;
+  margin-bottom: 0.8rem;
+  max-width: none;
+}
+.contact-detail {
+  font-size: 0.9rem;
+  color: rgba(236,230,218,0.6);
+  line-height: 2;
+  max-width: none;
+}
+.contact-detail a {
+  color: rgba(168,144,96,0.75);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.contact-detail a:hover { color: var(--oro); }
+
+.contact-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(168,144,96,0.6);
+  margin-top: 0.6rem;
+  display: block;
+}
+
+.cta-text {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  font-style: normal;
+  color: #CFC6B8;
+  margin-bottom: 1rem;
+  max-width: none;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+/* INDUSTRY */
+.industry-section {
+  padding: 6rem 2rem;
+  max-width: 860px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(51,42,34,0.5);
+}
+.industry-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  color: #ECE6DA;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
+}
+.industry-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(168,144,96,0.5);
+  margin-bottom: 3rem;
+  display: block;
+}
+.industry-block {
+  margin-bottom: 2.5rem;
+  line-height: 1.9;
+  font-size: 1rem;
+  color: rgba(236,230,218,0.8);
+  border-left: 2px solid rgba(168,144,96,0.2);
+  padding-left: 1.5rem;
+}
+.industry-block strong {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oro);
+  margin-bottom: 0.8rem;
+}
+.industry-contact {
+  color: var(--oro);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(168,144,96,0.3);
+  transition: border-color 0.3s;
+}
+.industry-contact:hover { border-color: var(--oro); }
+footer {
+  text-align: center;
+  padding: 2.5rem 2rem 5rem;
+  border-top: 1px solid rgba(51,42,34,0.5);
+  position: relative;
+  z-index: 1000;
+}
+
+footer p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: rgba(168,144,96,0.85);
+  max-width: none;
+  margin: 0;
+  line-height: 2;
+}
+
+/* AUDIO TOGGLE */
+/* #audio-toggle ora è dentro il banner — rimossa regola fixed */
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeRight {
+  from { opacity:0; transform:translateX(-20px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+/* SCROLL REVEAL — definitivo */
+.reveal { opacity: 1; transform: none; }
+
+.fade-section {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fade-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: none;
+}
+
+/* Stagger card categorie */
+#sec-categorie.visible > div > div:nth-child(1) { opacity:1; transform:none; transition-delay: 0.05s; }
+#sec-categorie.visible > div > div:nth-child(2) { opacity:1; transform:none; transition-delay: 0.2s; }
+#sec-categorie.visible > div > div:nth-child(3) { opacity:1; transform:none; transition-delay: 0.35s; }
+#sec-categorie.visible > div > div:nth-child(4) { opacity:1; transform:none; transition-delay: 0.5s; }
+
+/* RESPONSIVE tweaks */
+@media (max-width: 480px) {
+  .partnership-inner { padding: 0; }
+  .memorial { padding: 2rem 1.2rem; }
+  .partner-cta-block { padding: 2rem 1rem; }
+}
+
+/* ── SEZIONE PROGETTO — tipografia autoriale ── */
+#sec-progetto {
+  max-width: 980px;
+  padding: 7rem 2rem;
+}
+
+#sec-progetto p,
+#sec-progetto .territory-block {
+  max-width: 680px;
+}
+
+#sec-progetto p + p {
+  margin-top: 2.2rem;
+}
+
+#sec-progetto .territory-block {
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+}
+
+#sec-progetto .project-logline {
+  margin-top: 2.8rem;
+  margin-bottom: 0.5rem;
+}
+
+#sec-progetto .section-label {
+  margin-bottom: 2.8rem;
+}
+
+.project-title {
+  font-family: "Bodoni Moda", serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--bianco-calce);
+  max-width: 980px;
+  margin-bottom: 0.6rem;
+}
+
+.project-title em {
+  font-family: "Bodoni Moda", serif;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--oro);
+  text-shadow: 0 0 18px rgba(51,42,34,0.5);
+}
+
+.project-logline {
+  font-family: "Source Serif 4", serif;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  line-height: 1.9;
+  color: var(--oro-chiaro);
+  font-style: italic;
+  border-left: 1.5px solid rgba(168,144,96,0.35);
+  padding-left: 1.4rem;
+  margin-top: 2rem;
+  max-width: 820px;
+}
+
+/* CORNICE RUGGINOSA attorno alle card */
+.rust-frame {
+  padding: 8px;
+  background-image: url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');
+  background-size: cover;
+  background-position: center;
+  display: block;
+}
+
+.rust-frame > div,
+.rust-frame > * {
+  background: #0D1114;
+}
+</style>
+<link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
+<style>
+/* Brevo form overrides */
+#sib-container { padding: 1.8rem !important; }
+#sib-form .sib-form-block { padding: 0.4rem 0 !important; }
+#sib-form .entry__field { margin-top: 0.4rem; }
+.sib-form { max-width: 480px !important; margin: 0 auto !important; }
+#sib-container { max-width: 480px !important; }
+#sib-form .input { 
+  background: #0D1114 !important; 
+  border: 1px solid rgba(168,144,96,0.4) !important; 
+  color: #faf6f0 !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.85rem !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 2px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  -webkit-text-fill-color: #faf6f0 !important;
+}
+#sib-form .input::placeholder { color: rgba(236,230,218,0.4) !important; opacity: 1 !important; }
+#sib-form input#EMAIL {
+  background: #0D1114 !important;
+  color: #faf6f0 !important;
+  -webkit-text-fill-color: #faf6f0 !important;
+}
+#sib-form input#EMAIL::placeholder { color: rgba(236,230,218,0.4) !important; }
+#sib-form .entry__label { 
+  font-family: 'Montserrat', sans-serif !important;
+  color: rgba(236,230,218,0.6) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 0.3rem !important;
+}
+#sib-form .entry__specification {
+  font-family: 'Montserrat', sans-serif !important;
+  color: rgba(236,230,218,0.25) !important;
+  font-size: 0.6rem !important;
+  margin-top: 0.25rem !important;
+}
+#sib-form .sib-form__declaration {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+#sib-form .declaration-block-icon { display: none !important; }
+#sib-form .sib-form__declaration > div:last-child {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.6rem !important;
+  color: rgba(236,230,218,0.22) !important;
+  line-height: 1.6 !important;
+}
+#sib-form .sib-form__declaration > div:last-child p,
+#sib-form .sib-form__declaration > div:last-child a {
+  font-size: 0.6rem !important;
+  color: rgba(236,230,218,0.22) !important;
+}
+#sib-form .sib-form-block__button {
+  width: 100% !important;
+  margin-top: 0.5rem !important;
+}
+#error-message, #success-message { display: none !important; }
+#error-message.sib-form-message-panel--active,
+#success-message.sib-form-message-panel--active { display: block !important; }
+
+/* Fix reCaptcha invisibile che si espande */
+.g-recaptcha { position: absolute !important; opacity: 0 !important; pointer-events: none !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+/* Badge reCaptcha visibile nell'angolo */
+.grecaptcha-badge { visibility: visible !important; opacity: 1 !important; display: block !important; }
+/* Fix spinner SVG nel bottone */
+.sib-hide-loader-icon { display: none !important; }
+
+/* Checkbox */
+#sib-form .input_replaced { 
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+#sib-form .checkbox_tick_positive { 
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  flex-shrink: 0 !important;
+  border: 1.5px solid rgba(168,144,96,0.6) !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  margin-top: 3px !important;
+  border-radius: 2px !important;
+}
+#sib-form .input_replaced:checked ~ .checkbox_tick_positive,
+#sib-form .input_replaced:checked + .checkbox_tick_positive {
+  background: #A89060 !important;
+  border-color: #A89060 !important;
+}
+#sib-form .entry__choice label { 
+  display: flex !important; 
+  align-items: flex-start !important; 
+  gap: 0.9rem !important;
+  cursor: pointer !important; 
+}
+/* Testo acconsento */
+#sib-form .entry__choice span p,
+#sib-form .entry__choice label > span:last-child { 
+  font-size: 0.68rem !important; 
+  font-family: 'Montserrat', sans-serif !important; 
+  color: rgba(168,144,96,0.65) !important; 
+  line-height: 1.65 !important;
+  background: transparent !important;
+}
+
+/* Mobile fix per form Brevo */
+.sib-form {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+#sib-form-container {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+#sib-container {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+#newsletter {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+@media (max-width: 600px) {
+  #sib-container { padding: 1.2rem 1rem !important; }
+  .sib-form { padding: 0 !important; }
+  #newsletter { padding: 2rem 1rem !important; }
+}
+
+/* TYPOGRAPHY CLASSES — sistema tipografico governato */
+.quote-strong {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.quote-long {
+  font-family: 'Source Serif 4', serif;
+  font-weight: 400;
+  line-height: 1.9;
+}
+.quote-attr {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oro);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">Crimine d'Onore<span style="display:block;font-family:'Montserrat',sans-serif;font-size:0.48rem;letter-spacing:0.18em;font-style:normal;font-weight:500;color:rgba(236,230,218,0.35);margin-top:2px;text-transform:uppercase;">&copy; Design — <a href="https://missbizstudio.com" target="_blank" style="color:rgba(236,230,218,0.35);text-decoration:none;">Miss Biz Studio</a></span></div>
+  <ul class="nav-links">
+    <li><a href="#sec-progetto">Il Progetto</a></li>
+    <li><a href="#sec-memoria">Memorial</a></li>
+    <li><a href="#sec-partnership">Partnership</a></li>
+    <li><a href="#sec-categorie">Diventa Partner</a></li>
+    <li><a href="#sec-autori">Gli Autori</a></li>
+    <li><a href="#industry">Industry</a></li>
+    <li><a href="#sec-contatti">Contatti</a></li>
+  </ul>
+  <div class="nav-arrows">
+    <button id="lang-toggle" onclick="toggleLang()" style="background:transparent;border:1px solid rgba(236,230,218,0.35);color:var(--bianco-calce);font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.15em;padding:0.3rem 0.7rem;cursor:pointer;margin-right:0.8rem;transition:all 0.3s;">EN</button>
+    <button class="nav-arrow" id="nav-prev" onclick="navStep(-1)" disabled title="Sezione precedente">&#8593;</button>
+    <button class="nav-arrow" id="nav-next" onclick="navStep(1)" title="Sezione successiva">&#8595;</button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="sec-hero">
+  <!-- Immagine come <img> per rispettare la composizione orizzontale -->
+  <img
+    class="hero-img"
+    src="https://i.postimg.cc/3NSwWbH0/enhanced-Gemini-Generated-Image-34aft934aft934af-1.png"
+    alt="Crimine d'Onore — poster"
+    loading="eager"
+  >
+  <div class="hero-overlay"></div>
+
+  <!-- Titolo in alto a sinistra: visibile senza scrollare -->
+  <div class="hero-content">
+    <p class="hero-eyebrow" data-it="Cortometraggio d&rsquo;autore &nbsp;&middot;&nbsp; Torre del Greco" data-en="Short Film &nbsp;&middot;&nbsp; Torre del Greco (Naples, Italy)">Cortometraggio d&rsquo;autore &nbsp;&middot;&nbsp; Torre del Greco</p>
+    <h1 class="hero-title"><span class="line1">Crimine</span><span class="line2">d&rsquo;Onore</span></h1>
+    <p class="hero-tagline" data-it="'O mare vede. 'A gente tace." data-en="The sea sees. People stay silent.">&lsquo;O mare vede. &lsquo;A gente tace.</p>
+    <p class="hero-memorial" data-it="In memoria di Gigi De Luca" data-en="In memory of Gigi De Luca">In memoria di Gigi De Luca</p>
+    <p class="hero-credits" data-it="Dal soggetto e dalla voce di Gino De Luca" data-en="From the subject and voice of Gino De Luca" style="margin-top:0.3rem;font-size:1.05rem;letter-spacing:0.05em;opacity:0;animation:fadeUp 0.8s ease 2.1s forwards;background:rgba(13,17,20,0.45);display:inline-block;padding:0.2rem 0.8rem;text-shadow:0 1px 6px rgba(0,0,0,1),0 2px 16px rgba(0,0,0,0.9);">Dal soggetto e dalla voce di Gino De Luca</p>
+    <p class="hero-credits" data-it="Regia di Carolina Oscurato" data-en="Directed by Carolina Oscurato" style="margin-top:0.4rem;margin-bottom:2.5rem;font-size:1.05rem;letter-spacing:0.05em;opacity:0;animation:fadeUp 0.8s ease 2.3s forwards;background:rgba(13,17,20,0.45);display:inline-block;padding:0.2rem 0.8rem;text-shadow:0 1px 6px rgba(0,0,0,1),0 2px 16px rgba(0,0,0,0.9);">Regia di Carolina Oscurato</p>
+  </div>
+
+  <!-- Barra metadati in basso -->
+  <div class="hero-meta">
+    <div class="hero-meta-item" data-it="Stato produzione" data-en="Production status">Stato produzione<span data-it="Pre-produzione · riprese previste 2026" data-en="Pre-production · shooting planned 2026">Pre-produzione · riprese previste 2026</span></div>
+    <div class="hero-meta-item" data-it="Territorio" data-en="Location">Territorio<span data-it="Torre del Greco · Napoli" data-en="Torre del Greco · Naples, Italy">Torre del Greco · Napoli</span></div>
+    <div class="hero-meta-item" data-it="Circuito festival" data-en="Festival circuit">Circuito festival<span data-it="Festival nazionali e internazionali" data-en="National and international festivals">Festival nazionali e internazionali</span></div>
+    <div class="hero-meta-item" data-it="Scadenza adesioni" data-en="Partnership deadline">Scadenza adesioni<span data-it="30 aprile 2026" data-en="April 30, 2026">30 aprile 2026</span></div>
+  </div>
+</header>
+
+<section class="content-section" id="sec-progetto">
+  <span class="section-label reveal" data-it="Il Progetto" data-en="The Project">
+    Il Progetto
+  </span>
+
+  <h2 class="reveal project-title"
+      data-it="Un noir che fonde il verismo di Viviani con una dimensione <em>espressionista, mistica e visionaria.</em>"
+      data-en="A noir blending the verism of Viviani with an <em>expressionist, mystical and visionary dimension.</em>">
+    Un noir che fonde il verismo di Viviani con una dimensione <em>espressionista, mistica e visionaria.</em>
+  </h2>
+
+  <p class="reveal"
+     data-it="In una comunità governata dal silenzio, un uomo si confronta con un ordine in cui l'onore diventa legge e la violenza si tramanda come destino."
+     data-en="In a community governed by silence, a man confronts an order in which honour becomes law and violence is handed down as destiny."
+     style="font-size:clamp(1.05rem,2.4vw,1.28rem);color:#CFC6B8;line-height:2;margin-top:1.4rem;font-style:italic;border-left:1px solid rgba(168,144,96,0.3);padding-left:1.2rem;">
+    In una comunità governata dal silenzio, un uomo si confronta con un ordine in cui l'onore diventa legge e la violenza si tramanda come destino.
+  </p>
+
+  <p class="reveal"
+     data-it="Torre del Greco, notte. La paranza è in mare. A terra, tra silenzi e tensioni, qualcosa rompe un equilibrio antico. Una verità emerge, ma nessuno la nomina. La comunità osserva, tace, non interviene. E quando l'onore prende il posto della giustizia, la violenza non si ferma: si tramanda."
+     data-en="Torre del Greco, night. The fishing boat is at sea. On land, amid silences and tensions, something breaks an ancient balance. A truth emerges, but no one names it. The community watches, remains silent, does not intervene. And when honour takes the place of justice, violence does not stop: it is passed on."
+     style="font-size:clamp(1rem,2.3vw,1.18rem);color:var(--testo);line-height:2;margin-top:1.5rem;">
+    Torre del Greco, notte. La paranza è in mare. A terra, tra silenzi e tensioni, qualcosa rompe un equilibrio antico. Una verità emerge, ma nessuno la nomina. La comunità osserva, tace, non interviene. E quando l'onore prende il posto della giustizia, la violenza non si ferma: si tramanda.
+  </p>
+
+  <p class="reveal"
+     data-it="Liberamente ispirato al dramma I Pescatori di Raffaele Viviani, il film rilegge il delitto d'onore per ciò che è: un crimine generato dalla violenza, dal silenzio e dalle regole non scritte della comunità."
+     data-en="Freely inspired by Raffaele Viviani's drama I Pescatori, the film reinterprets honour killing for what it is: a crime generated by violence, silence, and the community's unwritten rules."
+     style="margin-top:1.5rem;">
+    Liberamente ispirato al dramma <em>I Pescatori</em> di Raffaele Viviani, il film rilegge il delitto d'onore per ciò che è: un crimine generato dalla violenza, dal silenzio e dalle regole non scritte della comunità.
+  </p>
+
+  <div class="territory-block reveal">
+    <p data-it="Torre del Greco, città del corallo e della pesca, sorge sulla costa orientale del Golfo di Napoli, ai piedi del Vesuvio. In una delle comunità marinare più antiche del Mezzogiorno, il mare non giudica: custodisce. Accoglie ciò che gli uomini scelgono di non dire."
+       data-en="Torre del Greco, city of coral and fishing, stands on the eastern coast of the Gulf of Naples, at the foot of Vesuvius. In one of southern Italy's oldest maritime communities, the sea does not judge: it keeps. It receives what men choose not to say.">
+      Torre del Greco, città del corallo e della pesca, sorge sulla costa orientale del Golfo di Napoli, ai piedi del Vesuvio. In una delle comunità marinare più antiche del Mezzogiorno, il mare non giudica: custodisce. Accoglie ciò che gli uomini scelgono di non dire.
+    </p>
+  </div>
+
+  <p class="reveal"
+     style="margin-top:1.5rem;font-size:1.05rem;line-height:2;color:#CFC6B8;font-style:italic;border-left:1px solid rgba(168,144,96,0.3);padding-left:1.2rem;"
+     data-it="In questo mondo antico, il destino delle donne si consuma dentro regole che si chiamano onore. Ma quell'onore non protegge. Ferisce, impone il silenzio e si tramanda come destino."
+     data-en="In this ancient world, the fate of women is consumed within rules that call themselves honour. But that honour does not protect. It wounds, imposes silence, and is handed down as destiny.">
+    In questo mondo antico, il destino delle donne si consuma dentro regole che si chiamano onore. Ma quell'onore non protegge. Ferisce, impone il silenzio e si tramanda come destino.
+  </p>
+
+  <p class="reveal"
+     style="margin-top:2rem;font-size:1.2rem;line-height:1.8;color:#CFC6B8;font-style:italic;text-align:left;"
+     data-it="Il mare si tiene tutto. E la gente tace."
+     data-en="The sea keeps everything. And people remain silent.">
+    Il mare si tiene tutto. E la gente tace.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===================== SLIDER ===================== -->
+<div class="slider-section fade-section">
+  <p class="reveal" style="max-width:700px;margin:0 auto 2rem;text-align:center;font-family:'Source Serif 4',serif;font-style:italic;font-size:1rem;color:var(--testo);line-height:1.9;padding:0 2rem;">Frammenti visivi emersi durante la ricerca sul territorio. Non documentazione, ma materia narrativa: ciò che il film ha iniziato a rivelare prima ancora di essere girato.</p>
+  <div class="slider-wrap">
+    <div id="slider-track" class="slider-track">
+      <!-- Le slide vengono generate da JS -->
+    </div>
+    <button class="slider-btn prev" onclick="sliderMove(-1)" aria-label="Precedente">&#8592;</button>
+    <button class="slider-btn next" onclick="sliderMove(1)" aria-label="Successiva">&#8594;</button>
+  </div>
+  <div id="slider-dots" class="slider-dots"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== CAROLINA SU GINO ===================== -->
+<section class="fade-section" style="padding:5rem 2rem;max-width:760px;width:100%;margin:0 auto;text-align:center;box-sizing:border-box;">
+  <p style="font-family:'Source Serif 4',serif;font-size:clamp(1rem,2.5vw,1.4rem);font-weight:400;color:rgba(236,230,218,0.85);line-height:1.9;margin-bottom:1rem;" data-it="&ldquo;È stato Gino De Luca a immaginare questo film — a custodire per trent&rsquo;anni la voce del padre, a scegliere Viviani come specchio della memoria, a portare il territorio di Torre del Greco al centro del racconto. Senza di lui, I Pescatori non sarebbero tornati dal mare.&rdquo;" data-en="&ldquo;It was Gino De Luca who imagined this film — who kept his father&rsquo;s voice for thirty years, who chose Viviani as a mirror of memory, who brought the territory of Torre del Greco to the centre of the story. Without him, I Pescatori would not have returned from the sea.&rdquo;">&ldquo;È stato Gino De Luca a immaginare questo film — a custodire per trent&rsquo;anni la voce del padre, a scegliere Viviani come specchio della memoria, a portare il territorio di Torre del Greco al centro del racconto. Senza di lui, I Pescatori non sarebbero tornati dal mare.&rdquo;</p>
+  <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);" data-it="— Carolina Oscurato, regista" data-en="— Carolina Oscurato, director">— Carolina Oscurato, regista</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- FRASE GINO -->
+<section class="fade-section" style="padding:4rem 2rem;max-width:760px;width:100%;margin:0 auto;text-align:center;box-sizing:border-box;">
+  <p style="font-family:'Source Serif 4', serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:400;color:rgba(236,230,218,0.88);line-height:2;margin-bottom:1.2rem;" data-it="&ldquo;Questo film è dedicato a mio padre Gigi. Lui voleva farlo prima di me. Non ha fatto in tempo. Io l&rsquo;ho fatto per tutti e due, 30 anni dopo.&rdquo;" data-en="&ldquo;This film is dedicated to my father Gigi. He wanted to make it before me. He didn&rsquo;t make it in time. I made it for both of us, 30 years later.&rdquo;">&ldquo;Questo film è dedicato a mio padre Gigi. Lui voleva farlo prima di me. Non ha fatto in tempo. Io l&rsquo;ho fatto per tutti e due, 30 anni dopo.&rdquo;</p>
+  <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);" data-it="— Gino De Luca · Soggettista e voce narrante" data-en="— Gino De Luca · Subject writer and narrator">— Gino De Luca · Soggettista e voce narrante</p>
+</section>
+<section id="sec-memoria" class="fade-section">
+  <span class="section-label" data-it="In Memoria" data-en="In Memory">In Memoria</span>
+
+  <!-- Foto Gigi De Luca — desaturata con overlay sfumato -->
+  <div style="position:relative;width:100%;max-width:420px;margin:0 auto 2.5rem;overflow:hidden;">
+    <img src="https://i.postimg.cc/kMsvBPMH/Screenshot-2026-03-14-alle-15-25-00.png"
+         alt="Gigi De Luca"
+         style="width:100%;display:block;filter:grayscale(100%) brightness(0.75) contrast(1.1);object-fit:cover;">
+    <!-- Sfumato dal basso -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(13,17,20,0) 0%, rgba(13,17,20,0) 30%, rgba(13,17,20,0.6) 65%, rgba(13,17,20,1) 100%);"></div>
+    <!-- Sfumato dall'alto -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(13,17,20,0) 60%, rgba(13,17,20,0.5) 90%, rgba(13,17,20,1) 100%);"></div>
+    <!-- Sfumato da sinistra -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to right, rgba(13,17,20,0.9) 0%, rgba(13,17,20,0.3) 25%, rgba(13,17,20,0) 50%);"></div>
+    <!-- Sfumato da destra -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to left, rgba(13,17,20,0.9) 0%, rgba(13,17,20,0.2) 20%, rgba(13,17,20,0) 45%);"></div>
+  </div>
+
+  <h2 style="font-size:clamp(2.8rem,6vw,4rem);letter-spacing:0.04em;">Gigi De Luca</h2>
+  <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:2rem;margin-top:0.5rem;">1942 – 2023 · Attore · Torre del Greco</p>
+  <p data-it="Attore di teatro e di cinema, figlio di Torre del Greco fino all&rsquo;ultimo giorno. Dalla compagnia di Aldo Tarantino agli anni accanto a Nino Taranto, fino alla scuola di Eduardo De Filippo, ha attraversato il teatro e lo schermo con una presenza profondamente legata al territorio e alla cultura napoletana. Al cinema ha lavorato con Giuseppe Tornatore ne &ldquo;La leggenda del pianista sull&rsquo;oceano&rdquo;, con Ferzan Özpetek in &ldquo;Napoli velata&rdquo;, con Carlo Luglio ne &ldquo;Il ladro di cardellini&rdquo; e con Nanni Loy in &ldquo;Pacco, doppiopacco e contropaccotto&rdquo;. In televisione ha preso parte anche a &ldquo;I bastardi di Pizzofalcone&rdquo;. Il sindaco di Torre del Greco lo salut&ograve; con queste parole: &ldquo;Se ne va un pezzo della nostra storia, non solo artistica.&rdquo;" data-en="Actor of theatre and cinema, a son of Torre del Greco until his last day. From Aldo Tarantino&rsquo;s company to the years alongside Nino Taranto, to the school of Eduardo De Filippo, he moved through theatre and screen with a presence deeply rooted in the territory and Neapolitan culture. On screen he worked with Giuseppe Tornatore in &ldquo;The Legend of 1900&rdquo;, with Ferzan Özpetek in &ldquo;Napoli velata&rdquo;, with Carlo Luglio in &ldquo;Il ladro di cardellini&rdquo; and with Nanni Loy in &ldquo;Pacco, doppiopacco e contropaccotto&rdquo;. On television he also appeared in &ldquo;I Bastardi di Pizzofalcone&rdquo;. The Mayor of Torre del Greco said farewell with these words: &ldquo;A piece of our history is gone, not only artistic.&rdquo;">Attore di teatro e di cinema, figlio di Torre del Greco fino all&rsquo;ultimo giorno. Dalla compagnia di Aldo Tarantino agli anni accanto a Nino Taranto, fino alla scuola di Eduardo De Filippo, ha attraversato il teatro e lo schermo con una presenza profondamente legata al territorio e alla cultura napoletana. Al cinema ha lavorato con Giuseppe Tornatore ne &ldquo;La leggenda del pianista sull&rsquo;oceano&rdquo;, con Ferzan Özpetek in &ldquo;Napoli velata&rdquo;, con Carlo Luglio ne &ldquo;Il ladro di cardellini&rdquo; e con Nanni Loy in &ldquo;Pacco, doppiopacco e contropaccotto&rdquo;. In televisione ha preso parte anche a &ldquo;I bastardi di Pizzofalcone&rdquo;. Il sindaco di Torre del Greco lo salut&ograve; con queste parole: &ldquo;Se ne va un pezzo della nostra storia, non solo artistica.&rdquo;</p>
+  <div class="memorial">
+    <p class="memorial-quote">&ldquo;Ginié, vulesseme fa&rsquo; Piscature?<br>Tu fusse &rsquo;nu grande Cicciariello!&rdquo;</p>
+    <p class="memorial-attr">— Gigi De Luca</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===================== PARTNERSHIP ===================== -->
+<div class="partnership-section fade-section" id="sec-partnership">
+  <div class="partnership-inner" style="max-width:720px;">
+    <span class="section-label" data-it="Partnership Culturale" data-en="Cultural Partnership">Partnership Culturale</span>
+    <h2 data-it="Il tuo nome in un film che porta <em>Torre del Greco nel mondo</em>" data-en="Your name in a film that brings <em>Torre del Greco to the world</em>">Il tuo nome in un film che porta <em>Torre del Greco nel mondo</em></h2>
+
+    <p style="font-size:1.05rem;line-height:1.9;color:var(--sand);margin-bottom:2rem;" data-it="Dalla costa orientale del Golfo di Napoli, un film che porta il nome e la tradizione della città torrese nei festival nazionali e internazionali." data-en="From the eastern coast of the Gulf of Naples, a film that carries the name and tradition of Torre del Greco to national and international festivals.">
+      Dalla costa orientale del Golfo di Napoli, un film che porta il nome e la tradizione della città torrese nei festival nazionali e internazionali.
+    </p>
+
+    <p style="font-size:1.05rem;line-height:1.9;color:rgba(236,230,218,0.92);margin-bottom:1rem;" data-it="Torre del Greco ha una storia. Il mare, i pescatori, la paranza. E sotto, come sempre nelle storie vere, il buio. Questo film non guarda dall&rsquo;altra parte." data-en="Torre del Greco has a story. The sea, the fishermen, the fishing boat. And beneath, as always in true stories, the darkness. This film does not look away.">
+      Torre del Greco ha una storia. Il mare, i pescatori, la paranza. E sotto, come sempre nelle storie vere, il buio. Questo film non guarda dall&rsquo;altra parte.
+    </p>
+    <p style="font-size:1.15rem;line-height:1.9;color:#CFC6B8;margin-bottom:3.5rem;border-left:2px solid var(--oro);padding-left:1.4rem;font-family:'Source Serif 4',serif;font-weight:400;" data-it="Stiamo coinvolgendo un numero limitato di imprese del territorio (max 12 partner) per sostenere la realizzazione del film. Un&rsquo;opportunità concreta per associare il proprio nome a un film destinato ai festival nazionali e internazionali." data-en="We are involving a limited number of local businesses (max 12 partners) to support the making of the film. A concrete opportunity to associate your name with a film destined for national and international festivals.">
+      Stiamo coinvolgendo un numero limitato di imprese del territorio (max 12 partner) per sostenere la realizzazione del film. Un&rsquo;opportunità concreta per associare il proprio nome a un film destinato ai festival nazionali e internazionali.
+    </p>
+
+    <!-- VALUE: cosa ottiene un partner -->
+    <span class="section-label" style="margin-bottom:1.5rem;display:block;" data-it="Cosa ottiene un partner del film" data-en="What a film partner receives">Cosa ottiene un partner del film</span>
+    <div class="partner-benefits-grid">
+      <div class="partner-benefit-item">
+        <span class="partner-benefit-icon">✦</span>
+        <p class="partner-benefit-title" data-it="Visibilità nei crediti" data-en="Visibility in credits">Visibilità nei crediti</p>
+        <p class="partner-benefit-desc" data-it="Il tuo nome nei titoli di coda del film, nei materiali stampa e sui canali social del progetto" data-en="Your name in the film's end credits, press materials and the project's social channels">Il tuo nome nei titoli di coda del film, nei materiali stampa e sui canali social del progetto</p>
+      </div>
+      <div class="partner-benefit-item">
+        <span class="partner-benefit-icon">✦</span>
+        <p class="partner-benefit-title" data-it="Presenza all&rsquo;anteprima" data-en="Presence at the premiere">Presenza all&rsquo;anteprima</p>
+        <p class="partner-benefit-desc" data-it="Inviti esclusivi all&rsquo;anteprima locale con citazione ufficiale all&rsquo;evento Memorial" data-en="Exclusive invitations to the local premiere with official mention at the Memorial event">Inviti esclusivi all&rsquo;anteprima locale con citazione ufficiale all&rsquo;evento Memorial</p>
+      </div>
+      <div class="partner-benefit-item">
+        <span class="partner-benefit-icon">✦</span>
+        <p class="partner-benefit-title" data-it="Esclusività di categoria" data-en="Category exclusivity">Esclusività di categoria</p>
+        <p class="partner-benefit-desc" data-it="Sei l&rsquo;unico partner del tuo settore. Nessun concorrente affiancherà il tuo nome in questa produzione" data-en="You are the only partner in your sector. No competitor will appear alongside your name in this production">Sei l&rsquo;unico partner del tuo settore. Nessun concorrente affiancherà il tuo nome in questa produzione</p>
+      </div>
+      <div class="partner-benefit-item">
+        <span class="partner-benefit-icon">✦</span>
+        <p class="partner-benefit-title" data-it="Deducibilità fiscale" data-en="Tax deductibility">Deducibilità fiscale</p>
+        <p class="partner-benefit-desc" data-it="Il contributo è deducibile come spesa di rappresentanza e promozione aziendale — Art. 108 TUIR" data-en="The contribution is deductible as a representation and business promotion expense — Art. 108 TUIR">Il contributo è deducibile come spesa di rappresentanza e promozione aziendale — Art. 108 TUIR</p>
+      </div>
+    </div>
+
+    <div class="partner-cta-block">
+      <span class="partner-cta-label" data-it="Posti limitati · Adesioni entro il 30 aprile 2026" data-en="Limited spots · Applications by April 30, 2026">Posti limitati · Adesioni entro il 30 aprile 2026</span>
+      <p class="partner-cta-text" data-it="Scrivici per scoprire il piano di partnership&lt;br&gt;più adatto alla tua realtà" data-en="Write to us to discover the partnership plan&lt;br&gt;best suited to your needs">Scrivici per scoprire il piano di partnership<br>più adatto alla tua realtà</p>
+      <div class="partner-cta-buttons">
+        <a href="https://wa.me/393312586584" target="_blank" class="cta-btn" data-it="Scrivici su WhatsApp" data-en="Message us on WhatsApp">Scrivici su WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY: perché sostenere -->
+<section class="fade-section" style="padding:4rem 2rem;max-width:860px;margin:0 auto;">
+  <span class="section-label" style="display:block;margin-bottom:1.5rem;" data-it="Perché sostenere Crimine d&rsquo;Onore" data-en="Why support Crimine d&rsquo;Onore">Perché sostenere Crimine d&rsquo;Onore</span>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-bottom:3rem;text-align:left;">
+    <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 1.5rem;border:0.5px solid rgba(168,144,96,0.2);background:rgba(168,144,96,0.03);">
+      <span style="color:#CFC6B8;font-size:1.1rem;flex-shrink:0;">✦</span>
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.85rem;color:rgba(236,230,218,0.8);line-height:1.7;margin:0;">Film girato interamente a Torre del Greco</p>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 1.5rem;border:0.5px solid rgba(168,144,96,0.2);background:rgba(168,144,96,0.03);">
+      <span style="color:#CFC6B8;font-size:1.1rem;flex-shrink:0;">✦</span>
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.85rem;color:rgba(236,230,218,0.8);line-height:1.7;margin:0;">Progetto culturale dedicato alla memoria di Gigi De Luca</p>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 1.5rem;border:0.5px solid rgba(168,144,96,0.2);background:rgba(168,144,96,0.03);">
+      <span style="color:#CFC6B8;font-size:1.1rem;flex-shrink:0;">✦</span>
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.85rem;color:rgba(236,230,218,0.8);line-height:1.7;margin:0;">Presenza del brand nei festival nazionali e internazionali</p>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 1.5rem;border:0.5px solid rgba(168,144,96,0.2);background:rgba(168,144,96,0.03);">
+      <span style="color:#CFC6B8;font-size:1.1rem;flex-shrink:0;">✦</span>
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.85rem;color:rgba(236,230,218,0.8);line-height:1.7;margin:0;">Associazione del marchio a un progetto culturale di valore</p>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 1.5rem;border:0.5px solid rgba(168,144,96,0.2);background:rgba(168,144,96,0.03);">
+      <span style="color:#CFC6B8;font-size:1.1rem;flex-shrink:0;">✦</span>
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.85rem;color:rgba(236,230,218,0.8);line-height:1.7;margin:0;">Visibilità nei materiali ufficiali e nella comunicazione del film</p>
+    </div>
+  </div>
+
+  <!-- Citazione Gino -->
+  <div style="border-left:2px solid var(--gold);padding-left:1.8rem;margin-top:2rem;">
+    <p style="font-family:'Bodoni Moda',serif;font-size:1.2rem;color:var(--gold);font-style:italic;font-weight:600;margin-bottom:0.5rem;max-width:none;">
+      &ldquo;Un cinema che nasce dal territorio, per il territorio — e poi va nel mondo.&rdquo;
+    </p>
+    <p style="font-size:0.82rem;letter-spacing:0.12em;color:var(--sand);font-family:'Montserrat',sans-serif;text-transform:uppercase;max-width:none;">— Gino De Luca</p>
+  </div>
+</section>
+
+<!-- ===================== CATEGORIE PARTNER ===================== -->
+<section id="sec-categorie" class="fade-section" style="padding:6rem 2rem;max-width:1100px;margin:0 auto;">
+  <span class="section-label" data-it="Le Categorie di Partnership" data-en="Partnership Categories">Le Categorie di Partnership</span>
+  <h2 data-it="Scegli come entrare<br><em>nella storia</em>" data-en="Choose how to enter<br><em>into history</em>">Scegli come entrare<br><em>nella storia</em></h2>
+  <p style="font-family:'Source Serif 4',serif;font-size:clamp(1rem,2.5vw,1.3rem);font-weight:400;color:rgba(236,230,218,0.85);line-height:1.9;max-width:700px;margin:2rem auto 0.8rem;" data-it="&ldquo;I Pescatori di Viviani è un&rsquo;opera che continua a interrogare il presente. Questo film nasce dal desiderio di ascoltarla oggi.&rdquo;" data-en="&ldquo;I Pescatori by Viviani is a work that continues to question the present. This film is born from the desire to listen to it today.&rdquo;">&ldquo;I Pescatori di Viviani è un&rsquo;opera che continua a interrogare il presente. Questo film nasce dal desiderio di ascoltarla oggi.&rdquo;</p>
+  <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1rem;max-width:700px;margin-left:auto;margin-right:auto;text-align:center;" data-it="— Carolina Oscurato, regista" data-en="— Carolina Oscurato, director">— Carolina Oscurato, regista</p>
+  <p style="font-family:'Source Serif 4', serif;font-size:clamp(1rem,2vw,1.15rem);font-weight:400;color:rgba(236,230,218,0.7);max-width:680px;margin:0 auto 1.5rem;" data-it="Un progetto cinematografico che unisce territorio, memoria culturale e visibilità internazionale." data-en="A cinematic project that unites territory, cultural memory and international visibility.">Un progetto cinematografico che unisce territorio, memoria culturale e visibilità internazionale.</p>
+  <p style="font-size:1.05rem;color:rgba(236,230,218,0.65);max-width:600px;margin:0 auto 4rem;" data-it="Ogni categoria è un modo diverso di essere parte di Crimine d'Onore. Non vendiamo spazi pubblicitari — offriamo un posto nella memoria di un film." data-en="Each category is a different way of being part of Crimine d'Onore. We don't sell advertising space — we offer a place in the memory of a film.">Ogni categoria è un modo diverso di essere parte di Crimine d'Onore. Non vendiamo spazi pubblicitari — offriamo un posto nella memoria di un film.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;margin-bottom:5rem;">
+
+    <!-- PRE-PRODUZIONE -->
+    <div style="padding:12px;background-image:url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');background-size:100% 100%;background-repeat:no-repeat;"><div style="border:1px solid rgba(168,144,96,0.35);padding:2.5rem 2rem;position:relative;background:#0D1114;">
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1.2rem;" data-it="01 · Pre-produzione" data-en="01 · Pre-production">01 · Pre-produzione</p>
+      <h3 style="font-family:'Bodoni Moda',serif;font-size:1.5rem;color:var(--bianco);font-weight:900;margin-bottom:1rem;line-height:1.2;" data-it="Entra prima<br>che inizi tutto" data-en="Enter before<br>it all begins">Entra prima<br>che inizi tutto</h3>
+      <p style="font-size:0.95rem;color:rgba(236,230,218,0.65);line-height:1.9;" data-it="Sei tra i primi a credere nel progetto. Il tuo nome compare nei materiali di sviluppo, nei dossier per i festival e nella comunicazione del film fin dalla sua origine. Una presenza rara — quella di chi c'era dall'inizio." data-en="You are among the first to believe in the project. Your name appears in development materials, festival dossiers and the film's communications from its very origin. A rare presence — that of those who were there from the beginning.">Sei tra i primi a credere nel progetto. Il tuo nome compare nei materiali di sviluppo, nei dossier per i festival e nella comunicazione del film fin dalla sua origine. Una presenza rara — quella di chi c'era dall'inizio.</p>
+      <ul style="margin-top:1.5rem;list-style:none;padding:0;font-size:0.85rem;color:rgba(168,144,96,0.8);line-height:2.2;">
+        <li data-it="✦ Menzione nei materiali di sviluppo" data-en="✦ Mention in development materials">✦ Menzione nei materiali di sviluppo</li>
+        <li data-it="✦ Logo nei dossier per i festival" data-en="✦ Logo in festival dossiers">✦ Logo nei dossier per i festival</li>
+        <li data-it="✦ Citazione nella comunicazione social" data-en="✦ Citation in social communications">✦ Citazione nella comunicazione social</li>
+        <li data-it="✦ Invito all'anteprima locale" data-en="✦ Invitation to the local premiere">✦ Invito all'anteprima locale</li>
+      </ul>
+    </div></div>
+
+    <!-- PRODUZIONE -->
+    <div style="padding:12px;background-image:url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');background-size:100% 100%;background-repeat:no-repeat;"><div style="border:1px solid rgba(168,144,96,0.5);padding:2.5rem 2rem;position:relative;background:#0D1114;">
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1.2rem;" data-it="02 · Produzione" data-en="02 · Production">02 · Produzione</p>
+      <h3 style="font-family:'Bodoni Moda',serif;font-size:1.5rem;color:var(--bianco);font-weight:900;margin-bottom:1rem;line-height:1.2;" data-it="Il tuo brand<br>sul set" data-en="Your brand<br>on set">Il tuo brand<br>sul set</h3>
+      <p style="font-size:0.95rem;color:rgba(236,230,218,0.65);line-height:1.9;" data-it="Sostieni le riprese e sei presente dove il film prende vita. Il tuo logo nei titoli di coda, la tua presenza nelle foto di scena, un legame autentico con il territorio e la sua storia." data-en="You support the shoot and are present where the film comes to life. Your logo in the end credits, your presence in production stills, an authentic connection with the territory and its history.">Sostieni le riprese e sei presente dove il film prende vita. Il tuo logo nei titoli di coda, la tua presenza nelle foto di scena, un legame autentico con il territorio e la sua storia.</p>
+      <ul style="margin-top:1.5rem;list-style:none;padding:0;font-size:0.85rem;color:rgba(168,144,96,0.8);line-height:2.2;">
+        <li data-it="✦ Logo nei titoli di coda del film" data-en="✦ Logo in the film's end credits">✦ Logo nei titoli di coda del film</li>
+        <li data-it="✦ Presenza nelle foto di scena ufficiali" data-en="✦ Presence in official production stills">✦ Presenza nelle foto di scena ufficiali</li>
+        <li data-it="✦ Visita al set su invito" data-en="✦ On-invitation set visit">✦ Visita al set su invito</li>
+        <li data-it="✦ Tutto il livello Pre-produzione" data-en="✦ All Pre-production level benefits">✦ Tutto il livello Pre-produzione</li>
+      </ul>
+    </div></div>
+
+    <!-- PARTNER PRODUZIONE -->
+    <div style="padding:12px;background-image:url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');background-size:100% 100%;background-repeat:no-repeat;"><div style="border:1px solid rgba(168,144,96,0.6);padding:2.5rem 2rem;position:relative;background:#0D1114;">
+      <p style="font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1.2rem;" data-it="03 · Partner Produzione" data-en="03 · Production Partner">03 · Partner Produzione</p>
+      <h3 style="font-family:'Bodoni Moda',serif;font-size:1.5rem;color:var(--bianco);font-weight:900;margin-bottom:1rem;line-height:1.2;" data-it="Sostenitore<br>della produzione" data-en="Supporter<br>of the production">Sostenitore<br>della produzione</h3>
+      <p style="font-size:0.95rem;color:rgba(236,230,218,0.65);line-height:1.9;" data-it="Il tuo brand viene associato alla produzione del film con visibilità nei materiali ufficiali del progetto." data-en="Your brand is associated with the film production with visibility in the official project materials.">Il tuo brand viene associato alla produzione del film con visibilità nei materiali ufficiali del progetto.</p>
+      <ul style="margin-top:1.5rem;list-style:none;padding:0;font-size:0.85rem;color:rgba(168,144,96,0.8);line-height:2.2;">
+        <li data-it="✦ Logo nel poster ufficiale del film" data-en="✦ Logo on the official film poster">✦ Logo nel poster ufficiale del film</li>
+        <li data-it="✦ Presenza in tutti i materiali festival" data-en="✦ Presence in all festival materials">✦ Presenza in tutti i materiali festival</li>
+        <li data-it="✦ Credito nei titoli di coda" data-en="✦ Credit in the end credits">✦ Credito nei titoli di coda</li>
+        <li data-it="✦ Tutto il livello Produzione" data-en="✦ All Production level benefits">✦ Tutto il livello Produzione</li>
+      </ul>
+    </div></div>
+
+  </div>
+
+  <!-- MECENATE DEL FILM — banner orizzontale, piena larghezza -->
+  <div style="padding:6px;background-image:url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');background-size:100% 100%;background-repeat:no-repeat;">
+  <div style="position:relative;border:1px solid var(--oro);padding:3rem 3.5rem;margin-bottom:5rem;background:rgba(51,42,34,0.6);box-shadow:0 0 60px rgba(51,42,34,0.5),inset 0 1px 0 rgba(168,144,96,0.3);">
+
+    <!-- Filetto luminoso in cima -->
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--oro) 20%,var(--oro-chiaro) 50%,var(--oro) 80%,transparent 100%);"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;">
+
+      <div>
+        <p style="font-family:'Montserrat',sans-serif;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1.2rem;" data-it="04 · Mecenate del Film" data-en="04 · Film Patron">04 · Mecenate del Film</p>
+        <h3 style="font-family:'Bodoni Moda',serif;font-size:2.6rem;color:var(--testo);font-weight:900;font-style:normal;margin-bottom:1.4rem;line-height:1.0;letter-spacing:0.01em;text-shadow:0 0 40px rgba(168,144,96,0.2);" data-it="Il tuo nome<br>nella storia del film" data-en="Your name<br>in the film's history">Il tuo nome<br>nella storia del film</h3>
+        <p style="font-size:1rem;color:rgba(236,230,218,0.85);line-height:2;" data-it="Il livello più alto di presenza. Il tuo sostegno accompagna Crimine d'Onore dalla realizzazione alla diffusione nei festival e nei circuiti di proiezione. Il tuo brand diventa parte del racconto culturale del film ovunque l'opera venga presentata." data-en="The highest level of presence. Your support accompanies Crimine d'Onore from production to distribution across festivals and screening circuits. Your brand becomes part of the cultural narrative of the film wherever the work is presented.">Il livello più alto di presenza. Il tuo sostegno accompagna Crimine d'Onore dalla realizzazione alla diffusione nei festival e nei circuiti di proiezione. Il tuo brand diventa parte del racconto culturale del film ovunque l'opera venga presentata.</p>
+      </div>
+
+      <div>
+        <ul style="list-style:none;padding:0;font-size:0.92rem;color:rgba(168,144,96,1);line-height:2.4;border-left:1px solid rgba(168,144,96,0.25);padding-left:2rem;">
+          <li data-it="✦ Naming right su un elemento del film" data-en="✦ Naming right on a film element">✦ Naming right su un elemento del film</li>
+          <li data-it="✦ Co-branding su tutti i materiali ufficiali" data-en="✦ Co-branding on all official materials">✦ Co-branding su tutti i materiali ufficiali</li>
+          <li data-it="✦ Presenza dai festival alle piattaforme streaming" data-en="✦ Presence from festivals to streaming platforms">✦ Presenza dai festival alle piattaforme streaming</li>
+          <li data-it="✦ Accesso VIP a tutte le proiezioni ufficiali" data-en="✦ VIP access to all official screenings">✦ Accesso VIP a tutte le proiezioni ufficiali</li>
+          <li data-it="✦ Incontro dedicato con la regia" data-en="✦ Dedicated meeting with the director">✦ Incontro dedicato con la regia</li>
+          <li data-it="✦ Tutto il livello Finanziatore" data-en="✦ All Financier level benefits">✦ Tutto il livello Finanziatore</li>
+        </ul>
+      </div>
+
+    </div>
+  </div></div>
+
+  <!-- FORM DIVENTA PARTNER -->
+  <div id="form-partner" style="max-width:620px;margin:0 auto;border-top:1px solid rgba(168,144,96,0.2);padding-top:4rem;">
+    <span class="section-label" data-it="Diventa Partner" data-en="Become a Partner">Diventa Partner</span>
+    <h3 style="font-family:'Bodoni Moda',serif;font-size:clamp(1.8rem,4vw,2.5rem);color:var(--bianco);font-weight:700;margin-bottom:0.8rem;" data-it="Parliamoci." data-en="Let's talk.">Parliamoci.</h3>
+    <p style="color:#CFC6B8;margin-bottom:2.5rem;" data-it="Raccontaci chi sei e come vorresti essere parte del film. Ti risponderemo entro 48 ore con una proposta su misura." data-en="Tell us who you are and how you'd like to be part of the film. We'll respond within 48 hours with a tailored proposal.">Raccontaci chi sei e come vorresti essere parte del film. Ti risponderemo entro 48 ore con una proposta su misura.</p>
+
+    <div id="brevo-partner-form">
+      <form action="https://formspree.io/f/xjgaevgv" method="POST" style="display:flex;flex-direction:column;gap:1rem;">
+        <input type="text" id="fp-nome" name="nome" placeholder="Nome e cognome" style="background:rgba(236,230,218,0.05);border:1px solid rgba(168,144,96,0.3);color:var(--bianco);padding:1rem 1.2rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;width:100%;box-sizing:border-box;">
+        <input type="text" id="fp-azienda" name="azienda" placeholder="Azienda / Organizzazione" style="background:rgba(236,230,218,0.05);border:1px solid rgba(168,144,96,0.3);color:var(--bianco);padding:1rem 1.2rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;width:100%;box-sizing:border-box;">
+        <input type="email" id="fp-email" name="email" placeholder="Email" style="background:rgba(236,230,218,0.05);border:1px solid rgba(168,144,96,0.3);color:var(--bianco);padding:1rem 1.2rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;width:100%;box-sizing:border-box;">
+        <select id="fp-cat" name="categoria" style="background:#0D1114;border:1px solid rgba(168,144,96,0.3);color:rgba(236,230,218,0.7);padding:1rem 1.2rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;width:100%;box-sizing:border-box;">
+          <option value="">Categoria di interesse</option>
+          <option value="01 · Pre-produzione">01 · Pre-produzione</option>
+          <option value="02 · Produzione">02 · Produzione</option>
+          <option value="03 · Partner Produzione">03 · Partner Produzione</option>
+          <option value="04 · Mecenate del Film">04 · Mecenate del Film</option>
+        </select>
+        <textarea id="fp-msg" name="messaggio" placeholder="Raccontaci brevemente la tua realtà e il tuo interesse..." rows="4" style="background:rgba(236,230,218,0.05);border:1px solid rgba(168,144,96,0.3);color:var(--bianco);padding:1rem 1.2rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;outline:none;width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        <input type="hidden" name="_subject" value="Partnership Crimine d'Onore — nuova candidatura">
+        <input type="hidden" name="_next" value="">
+        <p style="font-size:0.72rem;color:rgba(236,230,218,0.35);line-height:1.7;" data-it="Inviando questo modulo acconsenti al trattamento dei tuoi dati personali per essere ricontattato riguardo al progetto Crimine d'Onore, nel rispetto della nostra <a href='https://www.iubenda.com/privacy-policy/59303138' style='color:rgba(168,144,96,0.6);'>Privacy Policy</a>." data-en="By submitting this form you consent to the processing of your personal data to be contacted regarding the Crimine d'Onore project, in accordance with our <a href='https://www.iubenda.com/privacy-policy/59303138' style='color:rgba(168,144,96,0.6);'>Privacy Policy</a>.">Inviando questo modulo acconsenti al trattamento dei tuoi dati personali per essere ricontattato riguardo al progetto Crimine d'Onore, nel rispetto della nostra <a href="https://www.iubenda.com/privacy-policy/59303138" style="color:rgba(168,144,96,0.6);">Privacy Policy</a>.</p>
+        <button type="submit" style="background:var(--oro);color:var(--nero);border:none;padding:1.1rem 2.5rem;font-family:'Montserrat',sans-serif;font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:opacity 0.3s;" data-it="Invia la tua candidatura →" data-en="Submit your application →">Invia la tua candidatura →</button>
+        <div id="fp-msg-ok" style="display:none;color:#CFC6B8;font-family:'Montserrat',sans-serif;font-size:0.85rem;letter-spacing:0.1em;text-align:center;padding:1rem;" data-it="✦ Grazie! Ti risponderemo entro 48 ore." data-en="✦ Thank you! We'll get back to you within 48 hours.">✦ Grazie! Ti risponderemo entro 48 ore.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="fade-section" style="padding:5rem 2rem;max-width:760px;width:100%;margin:0 auto;text-align:center;box-sizing:border-box;">
+  <p style="font-family:'Source Serif 4', serif;font-size:clamp(1.2rem,3vw,1.8rem);font-style:italic;font-weight:400;color:#CFC6B8;line-height:1.7;margin-bottom:1.5rem;" data-it="&ldquo;C&rsquo;è un punto preciso in cui il verismo di Viviani smette di essere documento e diventa destino. La voce di Gino De Luca lo conosce, lo attraversa, lo tiene vivo. La regia lo porta in forma — espressionista, mistica, noir. Lì nasce Crimine d&rsquo;Onore.&rdquo;" data-en="&ldquo;There is a precise point where Viviani&rsquo;s verism stops being document and becomes destiny. Gino De Luca&rsquo;s voice knows it, crosses it, keeps it alive. My direction brings it into form — expressionist, mystical, noir. That is where Crimine d&rsquo;Onore is born.&rdquo;">&ldquo;C&rsquo;è un punto preciso in cui il verismo di Viviani smette di essere documento e diventa destino. La voce di Gino De Luca lo conosce, lo attraversa, lo tiene vivo. La regia lo porta in forma — espressionista, mistica, noir. Lì nasce Crimine d&rsquo;Onore.&rdquo;</p>
+  <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:4rem;" data-it="— Carolina Oscurato, regista" data-en="— Carolina Oscurato, director">— Carolina Oscurato, regista</p>
+
+  <div style="padding-top:3rem;border-top:1px solid rgba(168,144,96,0.15);">
+    <p style="font-family:'Source Serif 4', serif;font-size:clamp(1rem,2.5vw,1.4rem);font-weight:400;color:rgba(236,230,218,0.85);line-height:1.9;margin-bottom:0.8rem;" data-it="&ldquo;Il cinema è un&rsquo;altra lingua. Carolina quella lingua la parla come io parlo il napoletano.<br>Quando ho capito che era la persona giusta, gliel&rsquo;ho detto in un modo solo:&rdquo;" data-en="&ldquo;Cinema is another language. Carolina speaks that language the way I speak Neapolitan.<br>When I understood she was the right person, I told her in one way only:&rdquo;">&ldquo;Il cinema è un&rsquo;altra lingua. Carolina quella lingua la parla come io parlo il napoletano.<br>Quando ho capito che era la persona giusta, gliel&rsquo;ho detto in un modo solo:&rdquo;</p>
+    <p style="font-family:'Source Serif 4',serif;font-size:clamp(1.3rem,3.5vw,2.2rem);font-style:italic;font-weight:600;color:#CFC6B8;line-height:1.4;margin-bottom:1.2rem;" data-it="&ldquo;A te t&rsquo;ha mannate papà.&rdquo;" data-en="&ldquo;My father sent you to me.&rdquo;">&ldquo;A te t&rsquo;ha mannate papà.&rdquo;</p>
+    <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);" data-it="— Gino De Luca" data-en="— Gino De Luca">— Gino De Luca</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===================== GLI AUTORI ===================== -->
+<section id="sec-autori" class="fade-section">
+  <span class="section-label" data-it="Gli Autori" data-en="The Authors">Gli Autori</span>
+  <h2 data-it="Due visioni&lt;br&gt;&lt;em&gt;un solo film&lt;/em&gt;" data-en="Two visions&lt;br&gt;&lt;em&gt;one film&lt;/em&gt;">Due visioni<br><em>un solo film</em></h2>
+  <div class="autori-grid">
+    <div style="padding:12px;background-image:url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');background-size:100% 100%;background-repeat:no-repeat;display:flex;flex-direction:column;">
+    <div style="padding:2rem;background:#0D1114;flex:1;">
+      <p class="autore-name">Gino De Luca</p>
+      <p class="autore-role" data-it="Soggetto · Voce Narrante · Produttore" data-en="Subject · Narrator · Producer">Soggetto · Voce Narrante · Produttore</p>
+      <p class="autore-bio" data-it="Attore e autore teatrale con oltre 30 anni di carriera tra palcoscenico e set. Figlio d&rsquo;arte, debutta a 7 anni. A 12 entra in compagnia con Luca De Filippo. Ha lavorato con Mario Martone, Geppy Gleijeses, Armando Pugliese e Marco Sciaccaluga." data-en="Actor and playwright with over 30 years of career between stage and set. Born into theatre, he debuted at 7. At 12 he joined Luca De Filippo's company. He has worked with Mario Martone, Geppy Gleijeses, Armando Pugliese and Marco Sciaccaluga.">Attore e autore teatrale con oltre 30 anni di carriera tra palcoscenico e set. Figlio d&rsquo;arte, debutta a 7 anni. A 12 entra in compagnia con Luca De Filippo. Ha lavorato con Mario Martone, Geppy Gleijeses, Armando Pugliese e Marco Sciaccaluga.</p>
+      <p class="autore-credits">Noi credevamo (Martone, David di Donatello 2011) · Il giovane favoloso (2014) · Qui rido io con Toni Servillo (2020) · La voce che hai dentro con Massimo Ranieri (Mediaset, 2023)</p>
+    </div></div>
+    <div style="padding:12px;background-image:url('https://i.postimg.cc/HshgNFT1/Screenshot-2026-03-05-alle-03-37-16.png');background-size:100% 100%;background-repeat:no-repeat;display:flex;flex-direction:column;">
+    <div style="padding:2rem;background:#0D1114;flex:1;">
+      <p class="autore-name">Carolina Oscurato</p>
+      <p class="autore-role" data-it="Adattamento, Sceneggiatura e Regia · Produttore Creativo" data-en="Adaptation, Screenplay and Direction · Creative Producer">Adattamento, Sceneggiatura e Regia · Produttore Creativo</p>
+      <p class="autore-bio" data-it="Regista, sceneggiatrice e scrittrice. Formata tra set italiani e internazionali — tra cui The Twilight Saga: New Moon (Summit Entertainment). Ha ricoperto ruoli di aiuto regia e produzione esecutiva in produzioni italiane. Ha collaborato a sceneggiature selezionate in festival nazionali, tra cui il Giffoni Film Festival. Porta al progetto una visione autoriale solida e una conoscenza concreta del set." data-en="Director, screenwriter and writer. Trained on Italian and international sets — including The Twilight Saga: New Moon (Summit Entertainment). She has held roles as assistant director and executive producer on Italian productions. She has collaborated on screenplays selected at national festivals, including the Giffoni Film Festival. She brings to the project a solid authorial vision and concrete knowledge of the set.">Regista, sceneggiatrice e scrittrice. Formata tra set italiani e internazionali — tra cui The Twilight Saga: New Moon (Summit Entertainment). Ha ricoperto ruoli di aiuto regia e produzione esecutiva in produzioni italiane. Ha collaborato a sceneggiature selezionate in festival nazionali, tra cui il Giffoni Film Festival. Porta al progetto una visione autoriale solida e una conoscenza concreta del set.</p>
+      <p class="autore-credits">International Set Experience — The Twilight Saga: New Moon (Summit Entertainment) · Gomorroide (Fratelli del Bronx / Made in Sud) · Tifosi — La vena azzurra del Napoli (RIKA Film) · Script Doctor e Aiuto Regia, Giffoni Film Festival</p>
+    </div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===================== CONTATTI ===================== -->
+
+<div class="contacts-section fade-section" id="sec-contatti">
+  <span class="section-label" data-it="Incontriamoci" data-en="Let's Meet">Incontriamoci</span>
+  <p class="cta-text" data-it="Quando possiamo incontrarci per un caffè?" data-en="When can we meet for a coffee?">Quando possiamo incontrarci per un caffè?</p>
+  <p style="font-size:1rem;color:rgba(236,230,218,0.55);max-width:480px;margin:0 auto;" data-it="Discutiamo insieme il tuo posizionamento d&rsquo;eccellenza accanto a questo progetto." data-en="Let's discuss your positioning alongside this project.">Discutiamo insieme il tuo posizionamento d&rsquo;eccellenza accanto a questo progetto.</p>
+
+  <div class="contacts-grid">
+    <!-- GINO DE LUCA -->
+    <div class="contact-block">
+      <p class="contact-name">Gino De Luca</p>
+      <p class="contact-role">Soggetto · Voce Narrante · Produttore</p>
+      <div class="contact-detail">
+        DEL ART Associazione Culturale<br>
+        P.IVA 03795391212<br>
+        <a href="http://www.gigideluca.com" target="_blank">www.gigideluca.com</a>
+      </div>
+    </div>
+
+    <!-- EMAIL PRODUZIONE -->
+    <div class="contact-block" style="text-align:center;border:1px solid rgba(168,144,96,0.2);padding:2rem;background:rgba(168,144,96,0.04);">
+      <p class="contact-label" style="margin-bottom:0.5rem;">Email di produzione</p>
+      <a class="eml" data-u="criminedonore" data-d="proton.me" style="font-family:'Bodoni Moda',serif;font-size:1.1rem;color:#CFC6B8;"></a>
+    </div>
+
+    <!-- CAROLINA OSCURATO -->
+    <div class="contact-block">
+      <p class="contact-name">Carolina Oscurato</p>
+      <p class="contact-role">Adattamento, Sceneggiatura e Regia · Produttore Creativo</p>
+      <div class="contact-detail">
+        Miss Biz Studio — Creative Development, Design, Marketing &amp; Communication<br>
+        P.IVA 10326971214<br>
+        <span class="contact-label">PEC Miss Biz</span>
+        <a class="eml" data-u="missbiz" data-d="spidmail.it"></a><br>
+        <span class="contact-label">PEC Carolina Oscurato</span>
+        <a class="eml" data-u="carolinaoscurato" data-d="superpec.it"></a>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- ===================== INDUSTRY / PRESS ===================== -->
+<section id="industry" class="fade-section" style="padding:5rem 2rem;border-top:1px solid rgba(51,42,34,0.6);max-width:860px;margin:0 auto;">
+  <span class="section-label">Industry &amp; Press</span>
+  <h2 style="font-family:'Bodoni Moda',serif;font-size:clamp(2rem,5vw,3rem);color:#ECE6DA;margin-bottom:3rem;font-weight:900;" data-it="Scheda del progetto" data-en="Project Sheet">Scheda del progetto</h2>
+
+  <div style="margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(51,42,34,0.6);">
+    <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:0.8rem;" data-it="Logline" data-en="Logline">Logline</p>
+    <p style="font-family:'Source Serif 4', serif;font-size:clamp(1rem,2vw,1.2rem);line-height:1.9;color:#CFC6B8;" data-it="Un noir tra mare e memoria a Torre del Greco, sulla costa orientale del Golfo di Napoli, dove la tradizione dei pescatori diventa lo scenario di un crimine che il mare custodisce — dove nessuno va a riprenderlo." data-en="A noir between sea and memory in Torre del Greco, on the eastern coast of the Gulf of Naples, where the fishing tradition becomes the backdrop of a crime the sea keeps — where no one goes to reclaim it.">Un noir tra mare e memoria a Torre del Greco, sulla costa orientale del Golfo di Napoli, dove la tradizione dei pescatori diventa lo scenario di un crimine che il mare custodisce — dove nessuno va a riprenderlo.</p>
+  </div>
+
+  <div style="margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(51,42,34,0.6);">
+    <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1rem;" data-it="Scheda tecnica" data-en="Technical Sheet">Scheda tecnica</p>
+    <table style="width:100%;border-collapse:collapse;font-size:0.95rem;line-height:2;">
+      <tr><td style="color:rgba(236,230,218,0.45);width:40%;font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Titolo" data-en="Title">Titolo</td><td style="color:var(--bianco);">Crimine d&rsquo;Onore</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Formato" data-en="Format">Formato</td><td style="color:var(--bianco);" data-it="Cortometraggio" data-en="Short Film">Cortometraggio</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Durata" data-en="Duration">Durata</td><td style="color:var(--bianco);">20–22 min</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Lingua" data-en="Language">Lingua</td><td style="color:var(--bianco);" data-it="Napoletano / Italiano" data-en="Neapolitan / Italian">Napoletano / Italiano</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Ambientazione" data-en="Setting">Ambientazione</td><td style="color:var(--bianco);">Torre del Greco (Napoli)</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Stato" data-en="Status">Stato</td><td style="color:#CFC6B8;" data-it="Pre-produzione" data-en="Pre-production">Pre-produzione</td></tr>
+    </table>
+  </div>
+
+  <div style="margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(51,42,34,0.6);">
+    <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1rem;" data-it="Team principale" data-en="Main Team">Team principale</p>
+    <table style="width:100%;border-collapse:collapse;font-size:0.95rem;line-height:2.2;">
+      <tr><td style="color:rgba(236,230,218,0.45);width:40%;font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Soggetto, trattamento e voce narrante" data-en="Subject, treatment and narrator">Soggetto, trattamento e voce narrante</td><td style="color:var(--bianco);">Gino De Luca</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Adattamento, sceneggiatura e regia" data-en="Adaptation, screenplay and direction">Adattamento, sceneggiatura e regia</td><td style="color:var(--bianco);">Carolina Oscurato</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Produttore creativo e sviluppo progetto" data-en="Creative Producer &amp; Project Development">Produttore creativo e sviluppo progetto</td><td style="color:var(--bianco);">Carolina Oscurato</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Produzione esecutiva" data-en="Executive Production">Produzione esecutiva</td><td style="color:var(--bianco);">DEL ART Associazione Culturale</td></tr>
+      <tr><td style="color:rgba(236,230,218,0.45);font-family:'Montserrat',sans-serif;font-size:0.78rem;letter-spacing:0.1em;" data-it="Design, Marketing &amp; Communication" data-en="Design, Marketing &amp; Communication">Design, Marketing &amp; Communication</td><td style="color:var(--bianco);">Miss Biz Studio</td></tr>
+    </table>
+  </div>
+
+  <div>
+    <p style="font-family:'Montserrat',sans-serif;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(168,144,96,0.9);margin-bottom:1rem;" data-it="Contatti Industry &amp; Partnership" data-en="Industry &amp; Partnership Contacts">Contatti Industry &amp; Partnership</p>
+    <a class="eml" data-u="criminedonore" data-d="proton.me" style="font-family:'Bodoni Moda',serif;font-size:1.1rem;color:#CFC6B8;text-decoration:none;border-bottom:1px solid rgba(168,144,96,0.3);padding-bottom:2px;"></a>
+  </div>
+</section>
+
+<!-- ===================== NEWSLETTER ===================== -->
+<div id="newsletter" class="fade-section" style="text-align:center;padding:4rem 2rem;border-top:1px solid rgba(51,42,34,0.6);background:rgba(168,144,96,0.02);">
+  <span class="section-label" data-it="Newsletter" data-en="Newsletter">Newsletter</span>
+
+  <!-- Brevo Form — codice originale Brevo, stilizzato -->
+  <div class="sib-form" style="text-align:center;background-color:#0D1114;max-width:540px;margin:0 auto;">
+    <div id="sib-form-container" class="sib-form-container">
+      <div id="error-message" class="sib-form-message-panel" style="font-size:16px;text-align:left;font-family:Helvetica,sans-serif;color:#661d1d;background-color:#ffeded;border-radius:3px;border-color:#ff4949;max-width:540px;">
+        <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+          <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon"><path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-11.49 120h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM256 340c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z"/></svg>
+          <span class="sib-form-message-panel__inner-text">La tua iscrizione non può essere convalidata.</span>
+        </div>
+      </div>
+      <div></div>
+      <div id="success-message" class="sib-form-message-panel" style="font-size:16px;text-align:left;font-family:Helvetica,sans-serif;color:#085229;background-color:#e7faf0;border-radius:3px;border-color:#13ce66;max-width:540px;">
+        <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+          <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z"/></svg>
+          <span class="sib-form-message-panel__inner-text">La tua iscrizione è avvenuta correttamente.</span>
+        </div>
+      </div>
+      <div></div>
+      <div id="sib-container" class="sib-container--large sib-container--vertical" style="text-align:center;background-color:rgba(13,17,20,1);max-width:540px;border-radius:3px;border-width:1px;border-color:#A89060;border-style:solid;direction:ltr">
+        <form id="sib-form" method="POST" action="https://abdea072.sibforms.com/serve/MUIFAEgJRRdRXAkzkBWnuVD7fXtAN1MCSsZbfq38Oor3AnjB-jYSSdBiX8Uykg9vBYU2WyAazjLRNvKNcwsAvJ_WGnkVDpR-U2HXMBBtZsy9UABPsSJz68aUXu1h78WQxXKRSMt_9DNLnc2QLW-urtXPTS6fxhof9CMIJgSf53JGXk9ZbA7nn8-FGDUPKwWHEG9MaA3wWPIZitFozg==" data-type="subscription">
+          <div style="padding:16px 0;">
+            <div class="sib-form-block" style="font-size:32px;text-align:left;font-weight:700;font-family:Garamond,serif;color:#A89060;background-color:transparent;">
+              <p>Segui la nascita di Crimine d&rsquo;Onore</p>
+            </div>
+          </div>
+          <div style="padding:16px 0;">
+            <div class="sib-form-block" style="font-size:16px;text-align:left;font-family:Georgia,serif;color:#faf6f0;background-color:transparent;">
+              <div class="sib-text-form-block">
+                <p>Iscriviti alla newsletter per ricevere aggiornamenti sul progetto, sul territorio e sulla produzione del film.</p>
+              </div>
+            </div>
+          </div>
+          <div style="padding:16px 0;">
+            <div class="sib-input sib-form-block">
+              <div class="form__entry entry_block">
+                <div class="form__label-row">
+                  <label class="entry__label" style="font-weight:700;text-align:left;font-size:16px;font-family:Helvetica,sans-serif;color:#faf6f0;" for="EMAIL" data-required="*">Inserisci il tuo indirizzo email per iscriverti</label>
+                  <div class="entry__field">
+                    <input class="input" type="text" id="EMAIL" name="EMAIL" autocomplete="off" placeholder="EMAIL" data-required="true" required />
+                  </div>
+                </div>
+                <label class="entry__error entry__error--primary" style="font-size:16px;text-align:left;font-family:Helvetica,sans-serif;color:#661d1d;background-color:#ffeded;border-radius:3px;border-color:#ff4949;"></label>
+                <label class="entry__specification" style="font-size:12px;text-align:left;font-family:Helvetica,sans-serif;color:#8390A4;">Indica il tuo indirizzo email per iscriverti. Es. <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e9888b8aa9919093c78a8684">[email&#160;protected]</a></label>
+              </div>
+            </div>
+          </div>
+          <div style="padding:16px 0;">
+            <div class="sib-optin sib-form-block" data-required="true">
+              <div class="form__entry entry_mcq">
+                <div class="form__label-row">
+                  <div class="entry__choice">
+                    <label>
+                      <input type="checkbox" class="input_replaced" value="1" id="OPT_IN" name="OPT_IN" required />
+                      <span class="checkbox checkbox_tick_positive"></span>
+                      <span style="font-size:10px;text-align:left;font-family:Georgia,serif;color:#A89060;background-color:transparent;"><p><strong>Acconsento al trattamento dei miei dati personali per ricevere aggiornamenti sul progetto cinematografico </strong><em><strong>Crimine d&rsquo;Onore</strong></em><strong>, in conformità alla Privacy Policy.</strong></p><span data-required="*" style="display:inline;" class="entry__label entry__label_optin"></span></span>
+                    </label>
+                  </div>
+                </div>
+                <label class="entry__error entry__error--primary" style="font-size:16px;text-align:left;font-family:Helvetica,sans-serif;color:#661d1d;background-color:#ffeded;border-radius:3px;border-color:#ff4949;"></label>
+                <label class="entry__specification" style="font-size:12px;text-align:left;font-family:Helvetica,sans-serif;color:#8390A4;">Puoi annullare l&#039;iscrizione in qualsiasi momento utilizzando il link incluso nella nostra newsletter.</label>
+              </div>
+            </div>
+          </div>
+          <div style="padding:16px 0;">
+            <div class="sib-form__declaration" style="direction:ltr">
+              <div class="declaration-block-icon">
+                <svg class="icon__SVG" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><symbol id="svgIcon-sphere" viewBox="0 0 63 63"><path class="path1" d="M31.54 0l1.05 3.06 3.385-.01-2.735 1.897 1.05 3.042-2.748-1.886-2.738 1.886 1.044-3.05-2.745-1.897h3.393zm13.97 3.019L46.555 6.4l3.384.01-2.743 2.101 1.048 3.387-2.752-2.1-2.752 2.1 1.054-3.382-2.745-2.105h3.385zm9.998 10.056l1.039 3.382h3.38l-2.751 2.1 1.05 3.382-2.744-2.091-2.743 2.091 1.054-3.381-2.754-2.1h3.385zM58.58 27.1l1.04 3.372h3.379l-2.752 2.096 1.05 3.387-2.744-2.091-2.75 2.092 1.054-3.387-2.747-2.097h3.376zm-3.076 14.02l1.044 3.364h3.385l-2.743 2.09 1.05 3.392-2.744-2.097-2.743 2.097 1.052-3.377-2.752-2.117 3.385-.01zm-9.985 9.91l1.045 3.364h3.393l-2.752 2.09 1.05 3.393-2.745-2.097-2.743 2.097 1.05-3.383-2.751-2.1 3.384-.01zM31.45 55.01l1.044 3.043 3.393-.008-2.752 1.9L34.19 63l-2.744-1.895-2.748 1.891 1.054-3.05-2.743-1.9h3.384zm-13.934-3.98l1.036 3.364h3.402l-2.752 2.09 1.053 3.393-2.747-2.097-2.752 2.097 1.053-3.382-2.743-2.1 3.384-.01zm-9.981-9.91l1.045 3.364h3.398l-2.748 2.09 1.05 3.392-2.753-2.1-2.752 2.096 1.053-3.382-2.743-2.102 3.384-.009zM4.466 27.1l1.038 3.372H8.88l-2.752 2.097 1.053 3.387-2.743-2.09-2.748 2.09 1.053-3.387L0 30.472h3.385zm3.069-14.025l1.045 3.382h3.395L9.23 18.56l1.05 3.381-2.752-2.09-2.752 2.09 1.053-3.381-2.744-2.1h3.384zm9.99-10.056L18.57 6.4l3.393.01-2.743 2.1 1.05 3.373-2.754-2.092-2.751 2.092 1.053-3.382-2.744-2.1h3.384zm24.938 19.394l-10-4.22a2.48 2.48 0 00-1.921 0l-10 4.22A2.529 2.529 0 0019 24.75c0 10.47 5.964 17.705 11.537 20.057a2.48 2.48 0 001.921 0C36.921 42.924 44 36.421 44 24.75a2.532 2.532 0 00-1.537-2.336zm-2.46 6.023l-9.583 9.705a.83.83 0 01-1.177 0l-5.416-5.485a.855.855 0 010-1.192l1.177-1.192a.83.83 0 011.177 0l3.65 3.697 7.819-7.916a.83.83 0 011.177 0l1.177 1.191a.843.843 0 010 1.192z" fill="#0092FF"></path></symbol></defs></svg>
+                <svg class="svgIcon-sphere" style="width:45px;height:45px;"><use xlink:href="#svgIcon-sphere"></use></svg>
+              </div>
+              <div style="font-size:10px;text-align:left;font-family:Georgia,serif;color:#687484;background-color:transparent;">
+                <p>Utilizziamo Brevo come piattaforma di marketing. Inviando questo modulo, accetti che i dati personali da te forniti vengano trasferiti a Brevo per il trattamento in conformità <a href="https://www.brevo.com/it/legal/privacypolicy/" target="_blank">all'Informativa sulla privacy di Brevo.</a></p>
+              </div>
+            </div>
+          </div>
+          <div style="padding:16px 0;">
+            <div class="sib-form-block" style="text-align:left">
+              <button class="sib-form-block__button sib-form-block__button-with-loader" style="font-size:0.75rem;font-weight:600;font-family:'Montserrat',sans-serif;letter-spacing:0.25em;text-transform:uppercase;color:#0D1114;background-color:#A89060;border:none;padding:1rem 2.5rem;cursor:pointer;border-radius:0;width:100%;transition:background 0.3s;" form="sib-form" type="submit" onmouseover="this.style.background='#A89060'" onmouseout="this.style.background='#A89060'">
+                <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512"><path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z"/></svg>
+                ISCRIVITI
+              </button>
+            </div>
+          </div>
+          <input type="text" name="email_address_check" value="" class="input--hidden">
+          <input type="hidden" name="locale" value="it">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    DEL ART Associazione Culturale — P.IVA 03795391212<br>
+    Piazza Luigi Palomba 42 · 80059 Torre del Greco (NA) · www.gigideluca.com<br>
+    <br>
+    Miss Biz Studio — Creative Development, Design, Marketing &amp; Communication<br>
+    Carolina Oscurato — P.IVA 10326971214<br>
+    Strategic Development &amp; Creative Design
+  </p>
+  <p style="margin-top:1.5rem;display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
+    <a href="https://www.iubenda.com/privacy-policy/59303138" class="iubenda-black iubenda-noiframe iubenda-embed" title="Privacy Policy" style="color:rgba(168,144,96,0.6);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;font-family:'Montserrat',sans-serif;text-decoration:none;">Privacy Policy</a>
+    <a href="https://www.iubenda.com/privacy-policy/59303138/cookie-policy" class="iubenda-black iubenda-noiframe iubenda-embed" title="Cookie Policy" style="color:rgba(168,144,96,0.6);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;font-family:'Montserrat',sans-serif;text-decoration:none;">Cookie Policy</a>
+  </p>
+  <p style="margin-top:1.2rem;font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.12em;color:rgba(168,144,96,0.4);text-align:center;">
+    &copy; 2026 Crimine d&rsquo;Onore. Tutti i diritti riservati.
+  </p>
+  <p style="margin-top:0.6rem;font-family:'Montserrat',sans-serif;font-size:0.62rem;letter-spacing:0.18em;color:rgba(168,144,96,0.3);text-align:center;text-transform:uppercase;">
+    &copy; Design — <a href="https://missbizstudio.com" target="_blank" style="color:rgba(168,144,96,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='rgba(168,144,96,0.7)'" onmouseout="this.style.color='rgba(168,144,96,0.3)'">Miss Biz Studio</a>
+  </p>
+</footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+
+<audio id="bg-audio" loop preload="none" style="display:none">
+  <source src="./Fronna.mp3" type="audio/mpeg">
+</audio>
+
+<style>
+#music-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 9999;
+  background: rgba(13,17,20,0.96);
+  border-top: 1px solid rgba(168,144,96,0.25);
+  padding: 0.9rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+@media (max-width: 480px) {
+  #music-banner { padding: 0.7rem 1rem; }
+}
+#music-banner .banner-text p { margin: 0; }
+#music-banner .banner-title {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: rgba(168,144,96,0.9);
+  line-height: 1.3;
+}
+#music-banner .banner-sub {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(168,144,96,0.45);
+  line-height: 1.3;
+}
+#music-banner .banner-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+#music-banner .banner-right {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+#music-banner .btn-play {
+  background: #A89060;
+  color: #0D1114;
+  border: none;
+  padding: 0.55rem 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+#music-banner .btn-close {
+  background: transparent;
+  color: rgba(168,144,96,0.5);
+  border: 1px solid rgba(168,144,96,0.2);
+  padding: 0.55rem 0.7rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  line-height: 1;
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  #music-banner {
+    padding: 0.7rem 1rem;
+    gap: 0.6rem;
+  }
+  #music-banner .banner-title { font-size: 0.82rem; }
+  #music-banner .banner-sub { display: none; }
+  #music-banner .btn-play { padding: 0.5rem 0.9rem; font-size: 0.62rem; }
+}
+</style>
+
+<div id="music-banner" style="padding-right:5.5rem;">
+  <div class="banner-left">
+    <span style="color:#CFC6B8;font-size:1rem;flex-shrink:0;">♪</span>
+    <div class="banner-text">
+      <p class="banner-title">Attiva la colonna sonora</p>
+      <p class="banner-sub">Crimine d'Onore — Score originale</p>
+    </div>
+  </div>
+  <div class="banner-right">
+    <button id="audio-toggle" onclick="toggleAudio()" style="background:#A89060;color:#0D1114;border:none;padding:0.55rem 1.4rem;font-family:'Montserrat',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-weight:700;white-space:nowrap;">▶ Ascolta</button>
+    <button class="btn-close" onclick="dismissBanner()">✕</button>
+  </div>
+</div>
+
+
+<!-- ===================== SCRIPTS ===================== -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+/* ---- SLIDER ---- */
+var slides = [
+  { img: 'https://i.postimg.cc/JznL6PbK/Chat_GPT_Image_18_mar_2026_01_27_50.png', caption: 'Costa, mare e silenzio' },
+  { img: 'https://i.postimg.cc/0yQsWcpn/Chat_GPT_Image_18_mar_2026_01_32_21.png', caption: 'Roccia e acqua' },
+  { img: 'https://i.postimg.cc/0yQsWcpc/Chat_GPT_Image_18_mar_2026_01_31_04.png', caption: 'La barca ormeggiata' },
+  { img: 'https://i.postimg.cc/pVskYHBT/Chat-GPT-Image-18-mar-2026-02-37-14.png', caption: 'Scogliera, luce di mattino' }
+];
+
+var sliderIdx = 0;
+var track  = document.getElementById('slider-track');
+var dotsEl = document.getElementById('slider-dots');
+
+function buildSlider() {
+  if (!track) return;
+  slides.forEach(function(s, i) {
+    var slide = document.createElement('div');
+    slide.className = 'slide';
+    if (s.img) {
+      slide.innerHTML =
+        '<img src="' + s.img + '" alt="' + s.caption + '" loading="lazy">' +
+        '<div class="slide-caption">' + s.caption + '</div>';
+    } else {
+      slide.innerHTML =
+        '<div style="width:100%;height:420px;position:relative;overflow:hidden;">' +
+        '<img src="https://i.postimg.cc/3NSwWbH0/enhanced-Gemini-Generated-Image-34aft934aft934af-1.png" alt="Foto di scena" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:brightness(0.28);">' +
+        '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">' +
+        '<span style="font-family:\'Bodoni Moda\',serif;font-size:clamp(1.4rem,4vw,2.2rem);color:rgba(168,144,96,0.75);font-style:italic;font-weight:600;letter-spacing:0.05em;">Immagini dal set</span>' +
+        '<span style="font-family:\'Montserrat\',sans-serif;font-size:0.58rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(168,144,96,0.4);margin-top:0.8rem;">In arrivo</span>' +
+        '</div>' +
+        '</div>' +
+        '<div class="slide-caption">' + s.caption + '</div>';
+    }
+    track.appendChild(slide);
+
+    var dot = document.createElement('button');
+    dot.className = 's-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Vai alla slide ' + (i + 1));
+    dot.onclick = (function(idx){ return function(){ goToSlide(idx); }; })(i);
+    dotsEl.appendChild(dot);
+  });
+  updateSlider();
+}
+
+function goToSlide(n) {
+  sliderIdx = (n + slides.length) % slides.length;
+  updateSlider();
+}
+function sliderMove(dir) { goToSlide(sliderIdx + dir); }
+function updateSlider() {
+  if (!track) return;
+  track.style.transform = 'translateX(-' + (sliderIdx * 100) + '%)';
+  document.querySelectorAll('.s-dot').forEach(function(d, i) {
+    d.classList.toggle('active', i === sliderIdx);
+  });
+}
+
+var sliderTimer = setInterval(function(){ sliderMove(1); }, 5000);
+if (track) {
+  track.addEventListener('mouseenter', function(){ clearInterval(sliderTimer); });
+  track.addEventListener('mouseleave', function(){
+    sliderTimer = setInterval(function(){ sliderMove(1); }, 5000);
+  });
+}
+
+/* ---- EMAIL ANTI-OFFUSCAMENTO ---- */
+document.querySelectorAll('a.eml').forEach(function(a) {
+  var u = a.getAttribute('data-u');
+  var d = a.getAttribute('data-d');
+  var subject = a.getAttribute('data-subject');
+  var email = u + '@' + d;
+  var href = 'mailto:' + email;
+  if (subject) href += '?subject=' + encodeURIComponent(subject);
+  a.href = href;
+  /* Se non ha testo proprio (bottoni CTA) non sovrascrivere il testo */
+  if (!a.textContent.trim() || a.textContent.trim() === email) {
+    a.textContent = email;
+    a.style.color = 'rgba(168,144,96,0.75)';
+  }
+});
+
+/* ---- AUDIO ---- */
+var audio   = document.getElementById('bg-audio');
+var toggle  = document.getElementById('audio-toggle');
+var playing = false;
+var banner  = document.getElementById('music-banner');
+
+/* Rileva mobile/iOS */
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+function updateBtn(txt) {
+  var btn = document.getElementById('audio-toggle');
+  if (btn) btn.textContent = txt;
+}
+
+/* Funzione unica per avviare l'audio al primo gesto utente */
+function startAudioOnInteraction() {
+  if (!playing) {
+    audio.muted = false;
+    audio.play().then(function() {
+      playing = true;
+      updateBtn('⏸ Pausa');
+    }).catch(function() {});
+  }
+  document.removeEventListener('click', startAudioOnInteraction);
+  document.removeEventListener('touchstart', startAudioOnInteraction);
+  document.removeEventListener('keydown', startAudioOnInteraction);
+}
+
+/* Su desktop: prova autoplay muted poi unmute (funziona su Safari) */
+if (!isMobile) {
+  window.addEventListener('load', function() {
+    audio.muted = true;
+    audio.play().then(function() {
+      audio.muted = false;
+      playing = true;
+      updateBtn('⏸ Pausa');
+    }).catch(function() {
+      /* Chrome blocca — aspetta primo click ovunque */
+    });
+  });
+}
+
+/* Primo gesto utente — funziona su Chrome, Firefox, Samsung */
+document.addEventListener('click', startAudioOnInteraction, { once: true });
+document.addEventListener('touchstart', startAudioOnInteraction, { passive: true, once: true });
+document.addEventListener('keydown', startAudioOnInteraction, { once: true });
+
+function toggleBannerAudio(btn) {
+  if (!playing) {
+    audio.play().then(function() {
+      playing = true;
+      updateBtn('⏸ Pausa');
+    }).catch(function(e) { console.warn('Audio bloccato:', e); });
+  } else {
+    audio.pause();
+    playing = false;
+    updateBtn('▶ Ascolta');
+  }
+}
+
+function startMusic() {
+  toggleBannerAudio(null);
+}
+
+function dismissBanner() {
+  if (banner) banner.style.display = 'none';
+}
+
+function toggleAudio() {
+  var btn = document.getElementById('audio-toggle');
+  if (playing) {
+    audio.pause();
+    playing = false;
+    if (btn) btn.textContent = '▶ Ascolta';
+  } else {
+    audio.play();
+    playing = true;
+    if (btn) btn.textContent = '⏸ Pausa';
+  }
+}
+
+/* ---- NAV ARROWS ---- */
+var sections   = ['sec-hero','sec-progetto','sec-memoria','sec-partnership','sec-autori','industry','sec-contatti'];
+var currentIdx = 0;
+
+function navStep(dir) {
+  currentIdx = Math.max(0, Math.min(sections.length - 1, currentIdx + dir));
+  var el = document.getElementById(sections[currentIdx]);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('nav-prev').disabled = currentIdx === 0;
+  document.getElementById('nav-next').disabled = currentIdx === sections.length - 1;
+  updateNavActive();
+}
+
+function updateNavActive() {
+  document.querySelectorAll('.nav-links a').forEach(function(a){ a.classList.remove('active'); });
+  var map = { 'sec-progetto':0,'sec-memoria':1,'sec-partnership':2,'sec-autori':3,'sec-contatti':4 };
+  var sId = sections[currentIdx];
+  if (map[sId] !== undefined) {
+    var links = document.querySelectorAll('.nav-links a');
+    if (links[map[sId]]) links[map[sId]].classList.add('active');
+  }
+}
+
+var sectionObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var idx = sections.indexOf(e.target.id);
+      if (idx !== -1) {
+        currentIdx = idx;
+        document.getElementById('nav-prev').disabled = currentIdx === 0;
+        document.getElementById('nav-next').disabled = currentIdx === sections.length - 1;
+        updateNavActive();
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) sectionObs.observe(el);
+});
+
+/* ---- SCROLL REVEAL ---- */
+/* ---- INIT ---- */
+document.addEventListener('DOMContentLoaded', function() {
+  buildSlider();
+
+  function initReveal() {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0 });
+
+    document.querySelectorAll('.fade-section').forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('visible');
+      } else {
+        obs.observe(el);
+      }
+    });
+  }
+
+  setTimeout(initReveal, 800);
+  window.addEventListener('load', function() { setTimeout(initReveal, 300); });
+});
+function submitPartnerForm() {
+  var nome = document.getElementById('fp-nome').value.trim();
+  var azienda = document.getElementById('fp-azienda').value.trim();
+  var email = document.getElementById('fp-email').value.trim();
+  var cat = document.getElementById('fp-cat').value;
+  var msg = document.getElementById('fp-msg').value.trim();
+  if (!nome || !email) { alert('Inserisci almeno nome ed email.'); return; }
+
+  var btn = document.querySelector('#form-partner button');
+  if (btn) { btn.disabled = true; btn.textContent = 'Invio in corso...'; }
+
+  fetch('https://formspree.io/f/xjgaevgv', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      nome: nome,
+      azienda: azienda,
+      email: email,
+      categoria: cat,
+      messaggio: msg
+    })
+  })
+  .then(function(r) {
+    if (r.ok) {
+      document.getElementById('fp-msg-ok').style.display = 'block';
+      document.getElementById('fp-nome').value = '';
+      document.getElementById('fp-azienda').value = '';
+      document.getElementById('fp-email').value = '';
+      document.getElementById('fp-cat').value = '';
+      document.getElementById('fp-msg').value = '';
+    } else {
+      alert('Errore nell\'invio. Riprova o scrivici a criminedonore@proton.me');
+    }
+    if (btn) { btn.disabled = false; btn.textContent = 'Invia la tua candidatura →'; }
+  })
+  .catch(function() {
+    alert('Errore di connessione. Riprova o scrivici a criminedonore@proton.me');
+    if (btn) { btn.disabled = false; btn.textContent = 'Invia la tua candidatura →'; }
+  });
+}
+var currentLang = 'it';
+
+function toggleLang() {
+  var btn = document.getElementById('lang-toggle');
+  if (currentLang === 'it') {
+    applyLang('en');
+    currentLang = 'en';
+    btn.textContent = 'IT';
+  } else {
+    applyLang('it');
+    currentLang = 'it';
+    btn.textContent = 'EN';
+  }
+}
+
+var dict = {
+  'Il Progetto': 'The Project',
+  'In Memoria': 'In Memory',
+  'Partnership Culturale': 'Cultural Partnership',
+  'Le Categorie di Partnership': 'Partnership Categories',
+  'Diventa Partner': 'Become a Partner',
+  'Gli Autori': 'The Authors',
+  'Industry & Press': 'Industry & Press',
+  'Incontriamoci': "Let's Meet",
+  'Newsletter': 'Newsletter',
+  'Scegli come entrare': 'Choose how to enter',
+  'nella storia': 'into history',
+  'Due visioni': 'Two visions',
+  'un solo film': 'one film',
+  'Quando possiamo incontrarci per un caffè?': 'When can we meet for a coffee?',
+  'Discutiamo insieme il tuo posizionamento d\u2019eccellenza accanto a questo progetto.': "Let's discuss your positioning alongside this project.",
+  'Scrivici su WhatsApp': 'Message us on WhatsApp',
+  'Resta aggiornato sul progetto': 'Stay updated on the project',
+  'Sarai avvisato sulle riprese, i festival e l\u2019anteprima locale.': 'You will be notified about the shoot, festivals and local premiere.',
+  'Iscriviti \u2192': 'Subscribe \u2192',
+  'Segui la nascita di Crimine d\u2019Onore': "Follow the birth of Crimine d'Onore",
+  'Iscriviti per ricevere aggiornamenti sul progetto, sul territorio e sulla produzione del film.': 'Subscribe to receive updates on the project, the territory and the film production.',
+  'Scheda del progetto': 'Project Sheet',
+  'Logline': 'Logline',
+  'Scheda tecnica': 'Technical Sheet',
+  'Team principale': 'Main Team',
+  'Contatti Industry & Partnership': 'Industry & Partnership Contacts',
+  'Stato': 'Status',
+  'Pre-produzione': 'Pre-production',
+  'Territorio': 'Location',
+  'Circuito': 'Circuit',
+  'Festival naz. & intern.': 'Nat. & Intl. Festivals',
+  'Scadenza adesioni': 'Partnership deadline',
+  '30 aprile 2026': 'April 30, 2026',
+  'Entra prima\nche inizi tutto': 'Enter before\nit all begins',
+  'Il tuo brand\nsul set': 'Your brand\non set',
+  'Sostenitore\ndella produzione': 'Supporter\nof the production',
+  'Il tuo nome\nnella storia del film': 'Your name\nin the film\'s history',
+  'Email di produzione': 'Production email',
+  'Soggetto, trattamento e voce narrante': 'Subject, treatment and narrator',
+  'Adattamento, sceneggiatura e regia': 'Adaptation, screenplay and direction',
+  'Produttore creativo e sviluppo progetto': 'Creative Producer & Project Development',
+  'Produzione esecutiva': 'Executive Production',
+  'Gino De Luca': 'Gino De Luca',
+  'Carolina Oscurato': 'Carolina Oscurato',
+  'DEL ART Associazione Culturale': 'DEL ART Associazione Culturale',
+  'Miss Biz Studio': 'Miss Biz Studio',
+};
+
+function applyLang(lang) {
+  /* 1. Elementi con data-it/data-en */
+  document.querySelectorAll('[data-it][data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + lang);
+    if (val !== null) el.innerHTML = val;
+  });
+
+  /* 2. Testi via dizionario */
+  var walker = document.createTreeWalker(
+    document.body, NodeFilter.SHOW_TEXT,
+    { acceptNode: function(n) {
+      var tag = n.parentNode.tagName ? n.parentNode.tagName.toLowerCase() : '';
+      if (['script','style','audio','source','input','textarea'].indexOf(tag) >= 0) return NodeFilter.FILTER_REJECT;
+      if (n.parentNode.hasAttribute && n.parentNode.hasAttribute('data-it')) return NodeFilter.FILTER_REJECT;
+      return n.textContent.trim().length > 1 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }}
+  );
+  var nodes = [];
+  var n;
+  while ((n = walker.nextNode())) nodes.push(n);
+
+  if (lang === 'en') {
+    nodes.forEach(function(node) {
+      var t = node.textContent.trim();
+      if (dict[t]) {
+        node._original = node.textContent;
+        node.textContent = dict[t];
+      }
+    });
+  } else {
+    nodes.forEach(function(node) {
+      if (node._original) {
+        node.textContent = node._original;
+        delete node._original;
+      }
+    });
+  }
+
+  /* 3. Nav links */
+  var navMap = {
+    'Il Progetto': 'The Project', 'Memorial': 'Memorial',
+    'Partnership': 'Partnership', 'Gli Autori': 'The Authors',
+    'Contatti': 'Contacts', 'Industry': 'Industry', 'Diventa Partner': 'Become a Partner'
+  };
+  document.querySelectorAll('nav a').forEach(function(a) {
+    var t = a.textContent.trim();
+    if (lang === 'en' && navMap[t]) { a._it = t; a.textContent = navMap[t]; }
+    else if (lang === 'it' && a._it) { a.textContent = a._it; }
+  });
+}
+</script>
+<script>
+  window.REQUIRED_CODE_ERROR_MESSAGE = 'Scegli un prefisso paese';
+  window.LOCALE = 'it';
+  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "Le informazioni fornite non sono valide. Controlla il formato del campo e riprova.";
+  window.REQUIRED_ERROR_MESSAGE = "Questo campo non può essere lasciato vuoto. ";
+  window.GENERIC_INVALID_MESSAGE = "Le informazioni fornite non sono valide. Controlla il formato del campo e riprova.";
+  window.translation = {
+    common: {
+      selectedList: '{quantity} lista selezionata',
+      selectedLists: '{quantity} liste selezionate',
+      selectedOption: '{quantity} selezionato',
+      selectedOptions: '{quantity} selezionati',
+    }
+  };
+  var AUTOHIDE = Boolean(0);
+</script>
+<script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+<!-- Instagram floating button -->
+<a href="https://www.instagram.com/criminedonore/" target="_blank" rel="noopener"
+   title="Seguici su Instagram"
+   style="position:fixed;bottom:9.5rem;right:20px;z-index:9997;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(13,17,20,0.85);border:1px solid rgba(168,144,96,0.35);transition:transform 0.2s,opacity 0.2s;cursor:pointer;"
+   onmouseover="this.style.transform='translateY(-3px)';this.style.opacity='0.8'"
+   onmouseout="this.style.transform='translateY(0)';this.style.opacity='1'">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#A89060" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="17.5" cy="6.5" r="1" fill="#A89060" stroke="none"/>
+  </svg>
+</a>
+
+<!-- WhatsApp floating button -->
+<a href="https://wa.me/393312586584" target="_blank" rel="noopener"
+   title="Scrivici su WhatsApp"
+   style="position:fixed;bottom:5.5rem;right:20px;z-index:9997;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(13,17,20,0.85);border:1px solid rgba(168,144,96,0.35);transition:transform 0.2s,opacity 0.2s;cursor:pointer;"
+   onmouseover="this.style.transform='translateY(-3px)';this.style.opacity='0.8'"
+   onmouseout="this.style.transform='translateY(0)';this.style.opacity='1'">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="26" height="26">
+    <path d="M16 2C8.28 2 2 8.28 2 16c0 2.46.66 4.88 1.92 7.02L2 30l7.18-1.88A13.94 13.94 0 0 0 16 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.5c-2.2 0-4.36-.6-6.24-1.72l-.44-.26-4.58 1.2 1.22-4.44-.28-.46A11.44 11.44 0 0 1 4.5 16C4.5 9.61 9.61 4.5 16 4.5S27.5 9.61 27.5 16 22.39 27.5 16 27.5zm6.28-8.56c-.34-.17-2.02-1-2.34-1.1-.32-.12-.56-.17-.8.17-.24.34-.9 1.1-1.1 1.34-.2.22-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.68-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.52-.6.17-.2.22-.34.34-.56.12-.22.06-.42-.02-.6-.08-.17-.8-1.92-1.1-2.63-.28-.68-.58-.58-.8-.6h-.68c-.24 0-.62.08-.94.42-.32.34-1.22 1.2-1.22 2.9s1.25 3.37 1.42 3.6c.17.22 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.14.67-.1 2.06-.84 2.35-1.66.28-.82.28-1.52.2-1.66-.08-.14-.3-.22-.64-.38z" fill="#A89060"/>
+  </svg>
+</a>
+
+<!-- Brevo Conversations {literal} -->
+<script>
+    (function(d, w, c) {
+        w.BrevoConversationsID = '69b1b017074b7453d40fa142';
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = '
