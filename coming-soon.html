@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crimine d'Onore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Courier+Prime:ital@0;1&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+html {
+  height: 100%;
+  background-color: #0D1114;
+  background-image: url('https://i.postimg.cc/ncDf8664/Chat-GPT-Image-17-mar-2026-22-05-10.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bodoni Moda', Georgia, serif;
+  color: #ECE6DA;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(13,17,20,0.84);
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 3rem 2rem;
+  max-width: 680px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.line-top {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(168,144,96,0.5));
+  margin-bottom: 3rem;
+  animation: fadeIn 2s ease forwards;
+}
+
+.title {
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.3s forwards;
+}
+
+.line1 { display: block; color: #ECE6DA; font-style: normal; }
+.line2 {
+  display: block;
+  color: #A89060;
+  font-style: italic;
+  text-shadow: 0 0 8px rgba(168,144,96,0.12), 0 0 18px rgba(168,144,96,0.05);
+}
+
+.divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(168,144,96,0.4);
+  margin: 2.5rem auto;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.2s forwards;
+}
+
+.memorial {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #A89060;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 1.4s forwards;
+}
+
+.credits {
+  margin-top: 3.5rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 1.8s forwards;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  align-items: center;
+}
+
+.credit-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(168,144,96,0.6);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.credit-name {
+  font-family: 'Bodoni Moda', Georgia, serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: #CFC6B8;
+  letter-spacing: 0.02em;
+}
+
+.line-bottom {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to top, transparent, rgba(168,144,96,0.5));
+  margin-top: 3rem;
+  opacity: 0;
+  animation: fadeIn 2s ease 2s forwards;
+}
+
+.tagline {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: #D8CCB8;
+  opacity: 0;
+  animation: fadeIn 1s ease 2.5s forwards;
+  white-space: nowrap;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+
+@media (max-width:480px) {
+  .tagline { font-size:0.65rem; white-space:normal; text-align:center; width:90%; }
+  .line-top,.line-bottom { height:50px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="line-top"></div>
+
+  <h1 class="title">
+    <span class="line1">Crimine</span>
+    <span class="line2">d'Onore</span>
+  </h1>
+
+  <div class="divider"></div>
+
+  <p class="memorial">In memoria di Gigi De Luca</p>
+
+  <div class="credits">
+    <div>
+      <span class="credit-label">Da</span>
+      <span class="credit-name">«I Pescatori» di Raffaele Viviani</span>
+    </div>
+    <div>
+      <span class="credit-label">Soggetto e primo adattamento</span>
+      <span class="credit-name">Gino De Luca</span>
+    </div>
+    <div>
+      <span class="credit-label">Trasposizione cinematografica e regia</span>
+      <span class="credit-name">Carolina Oscurato</span>
+    </div>
+  </div>
+
+  <div class="line-bottom"></div>
+</div>
+
+<p class="tagline">'O mare vede. 'A gente tace.</p>
+
+</body>
+</html>
